@@ -1,0 +1,28 @@
+# Output
+/dist
+/tmp
+
+# Environment
+.env
+
+# Typescript
+/src/**/*.js
+!/src/**/*.spec.js
+!/src/**/*.controller.js
+!/src/models/**/*.js
+
+# Sass
+/src/styles/**/*.css
+
+# Dependencies
+/node_modules
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# System
+.DS_Store
