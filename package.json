@@ -4,7 +4,7 @@
   "description": "Proyecto para programación de aplicaciones de escritorio (WEB 2)",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ."
+    "dev": "gulp & nodemon ."
   },
   "repository": {
     "type": "git",
