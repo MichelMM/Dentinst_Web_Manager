@@ -15,8 +15,11 @@ const swaggerOptions = require('./swagger.config');
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 //Handlebars
 const handlebars = require('express-handlebars');
+//Mongodb
+const connectMongo = require('./src/controllers/db.controller');
 //Port
 const port = process.env.PORT || 3000;
+
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
@@ -25,7 +28,14 @@ app.set('view engine','handlebars');
 app.set('views','src/views');
 
 app.get('/',function(req,res){
-    res.render('index',{});
+    
+    connectMongo('Test_collection').then(function(collection){
+        collection.find(function(results){
+            res.render('index',{dentista:results[0].dentista});
+        })
+      }).catch(function(err){
+        res.send('ERROR')
+      });
 });
 
 app.use('/api', jsonParser, r_api);
