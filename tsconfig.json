@@ -1,9 +1,0 @@
-{
-    "include": ["src/**/*.ts"],
-    "exclude": ["node_modules", "src/**/*.spec.ts"],
-    "compilerOptions": {
-      "target": "es6",
-      "moduleResolution": "node",
-      "outDir": "public/scripts"
-    }
-  }
