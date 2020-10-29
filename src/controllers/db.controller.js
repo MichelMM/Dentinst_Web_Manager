@@ -1,8 +1,14 @@
 require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
-const url = process.env.DB_HOST;
+let url = process.env.DB_HOST;
+const user = process.env.DB_USER;
+const password = process.env.DB_PASSWORD;
+const dbname = process.env.DB_NAME;
 
-function connectMongo(collectionName) {
+url = url.replace("<user>",user).replace("<password>",password).replace("<dbname>",dbname);
+
+
+function connectMongo(collectionName, filter) {
     return new Promise(function (resolve, reject) {
         MongoClient.connect(url, {
             useUnifiedTopology: true
@@ -12,7 +18,7 @@ function connectMongo(collectionName) {
                 const collection = db.collection(collectionName);
                 resolve({
                     find: function (callback) {
-                        collection.find().limit(10).toArray(function (err, res) {
+                        collection.find(filter|| {}).toArray(function (err, res) {
                             callback(res);
                             client.close();
                         });
@@ -24,5 +30,6 @@ function connectMongo(collectionName) {
         });
     });
 }
+
 
 module.exports = connectMongo;

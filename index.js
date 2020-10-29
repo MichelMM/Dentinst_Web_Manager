@@ -29,9 +29,10 @@ app.set('views','src/views');
 
 app.get('/',function(req,res){
     
-    connectMongo('Test_collection').then(function(collection){
+    connectMongo('Dentist').then(function(collection){
         collection.find(function(results){
-            res.render('index',{dentista:results[0].dentista});
+          console.log(results)  
+          res.render('index',{results:results[0] });
         })
       }).catch(function(err){
         res.send('ERROR')
