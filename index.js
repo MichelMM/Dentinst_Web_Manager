@@ -30,12 +30,11 @@ app.set('views','src/views');
 app.get('/',function(req,res){
     
     connectMongo('Dentist').then(function(collection){
-        collection.find(function(results){
-          console.log(results)  
-          res.render('index',{results:results[0] });
+        collection.find(function(results){ 
+          res.render('index',{results:"correct" });
         })
       }).catch(function(err){
-        res.send('ERROR')
+        res.render('index',{results:"failure" });
       });
 });
 
