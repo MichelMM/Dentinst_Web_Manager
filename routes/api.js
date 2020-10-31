@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const connectMongo = require('./../src/controllers/db.controller');
-// const getAllDentists = require('./../src/controllers/db.controller');
+const {connectMongo,updateMongo} = require('./../src/controllers/db.controller');
 /** 
 * @swagger 
 * /api: 

@@ -68,4 +68,4 @@ function updateMongo(collectionName, filter, data, many) {
     });
 }
 
-module.exports = connectMongo;
+module.exports = {connectMongo,updateMongo};
