@@ -42,21 +42,19 @@ function updateMongo(collectionName, filter, data, many) {
                 const collection = db.collection(collectionName);
                 if (many || false) {//Update many or one
                     resolve({
-                        update: function (callback) {
+                        update: async function (callback) {
                             //Update first document after filter
-                            collection.updateMany(filter|| {}, data).toArray(function (err, res) {
-                                callback(res);
-                                client.close();
-                            });
+                            res = await collection.updateMany(filter|| {}, data);
+                            callback(res.result);
+                            client.close();
                         }
                     }); 
                 }else{
                     resolve({
-                        update: function (callback) {
-                            collection.updateOne(filter|| {}, data).toArray(function (err, res) {
-                                callback(res);
-                                client.close();
-                            });
+                        update: async function (callback) {
+                            res = await collection.updateOne(filter|| {}, data);
+                            callback(res.result);
+                            client.close();
                         }
                     });
                 }
