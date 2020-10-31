@@ -45,7 +45,7 @@ function updateMongo(collectionName, filter, data, many) {
                         update: async function (callback) {
                             //Update first document after filter
                             res = await collection.updateMany(filter|| {}, data);
-                            callback(res.result);
+                            callback({matchedCount:res.matchedCount,modifiedCount:res.modifiedCount});
                             client.close();
                         }
                     }); 
@@ -53,7 +53,7 @@ function updateMongo(collectionName, filter, data, many) {
                     resolve({
                         update: async function (callback) {
                             res = await collection.updateOne(filter|| {}, data);
-                            callback(res.result);
+                            callback({matchedCount:res.matchedCount,modifiedCount:res.modifiedCount});
                             client.close();
                         }
                     });
