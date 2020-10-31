@@ -40,7 +40,7 @@ function updateMongo(collectionName, filter, data, many) {
             if (err == null) {
                 const db = client.db();
                 const collection = db.collection(collectionName);
-                if (many) {//Update many or one
+                if (many || false) {//Update many or one
                     resolve({
                         update: function (callback) {
                             //Update first document after filter
