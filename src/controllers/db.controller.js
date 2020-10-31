@@ -32,4 +32,40 @@ function connectMongo(collectionName, filter) {
 }
 
 
+function updateMongo(collectionName, filter, data, options) {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url, {
+            useUnifiedTopology: true
+        }, function (err, client) {
+            if (err == null) {
+                const db = client.db();
+                const collection = db.collection(collectionName);
+                if (options.many) {//Update many or one
+                    resolve({
+                        update: function (callback) {
+                            //Update first document after filter
+                            collection.updateOne(filter|| {}, data).toArray(function (err, res) {
+                                callback(res);
+                                client.close();
+                            });
+                        }
+                    }); 
+                }else{
+                    resolve({
+                        update: function (callback) {
+                            collection.updateMany(filter|| {}, data).toArray(function (err, res) {
+                                callback(res);
+                                client.close();
+                            });
+                        }
+                    });
+                }
+                
+            } else {
+                reject(err)
+            }
+        });
+    });
+}
+
 module.exports = connectMongo;
