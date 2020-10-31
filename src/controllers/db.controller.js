@@ -32,7 +32,7 @@ function connectMongo(collectionName, filter) {
 }
 
 
-function updateMongo(collectionName, filter, data, options) {
+function updateMongo(collectionName, filter, data, many) {
     return new Promise(function (resolve, reject) {
         MongoClient.connect(url, {
             useUnifiedTopology: true
@@ -40,11 +40,11 @@ function updateMongo(collectionName, filter, data, options) {
             if (err == null) {
                 const db = client.db();
                 const collection = db.collection(collectionName);
-                if (options.many) {//Update many or one
+                if (many) {//Update many or one
                     resolve({
                         update: function (callback) {
                             //Update first document after filter
-                            collection.updateOne(filter|| {}, data).toArray(function (err, res) {
+                            collection.updateMany(filter|| {}, data).toArray(function (err, res) {
                                 callback(res);
                                 client.close();
                             });
@@ -53,7 +53,7 @@ function updateMongo(collectionName, filter, data, options) {
                 }else{
                     resolve({
                         update: function (callback) {
-                            collection.updateMany(filter|| {}, data).toArray(function (err, res) {
+                            collection.updateOne(filter|| {}, data).toArray(function (err, res) {
                                 callback(res);
                                 client.close();
                             });
