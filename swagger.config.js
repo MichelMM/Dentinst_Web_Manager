@@ -1,7 +1,7 @@
 // swagger.config.js
 module.exports = {
     swaggerDefinition: {
-        swagger: "2.0",
+        openapi: "3.0.0",
         info: {
             "title": "Dentist web manager",
             "description": "",
