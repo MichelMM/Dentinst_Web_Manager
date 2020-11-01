@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {connectMongo,updateMongo} = require('./../src/controllers/db.controller');
+const {connectMongo,updateMongo,postMongo} = require('./../src/controllers/db.controller');
 /** 
 * @swagger 
 * /api: 
@@ -45,7 +45,8 @@ router.patch('/dentist',function(req,res){
     }).catch(function(err){
       res.send(`ERROR: ${err}`).sendStatus(400);
     });
-/**
+    
+ /**
 * @swagger 
 * /api/dentist: 
 *   patch: 
@@ -85,6 +86,45 @@ router.patch('/dentist',function(req,res){
 *               type: string
 *               example: Error [*err*]
 */
+});
+
+router.post('/patient',function(req,res){
+  postMongo("Patient",req.body.data).then(function(collection){
+    collection.post(function(results){
+      res.send(results);
+    })
+  }).catch(function(err){
+    res.send(`ERROR: ${err}`).sendStatus(400);
+  });
+
+/**
+* @swagger 
+* /api/dentist: 
+*   post: 
+*     summary: Create one "Patient" document
+*     requestBody:
+*       description: data
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               data:
+*                 type: object
+*           example: {"data": {"Dentist_ID":1,"Name":"Miguel Robertooo","Last_name":"Mendez","Phone_number":"3324934501","Email":"miguel.r.m@mail.com","RFC":"123456","Schedule":{"Monday":["10-15"],"Tuesday":["8-16"],"Wednesday":["11-17"],"Thursday":["12-18"],"Friday":["8-16"],"Saturday":["10-15"],"Sunday":["8-13"]}}}
+*     responses: 
+*       200: 
+*         description: Documents posted
+*       400:
+*         description: Update error
+*         content:
+*           text/plain:
+*             schema:
+*               type: string
+*               example: Error [*err*]
+*/
+
 });
 
 router.get('/patients',function(req,res){
@@ -159,6 +199,45 @@ router.patch('/patient',function(req,res){
 */
 });
 
+router.post('/patient',function(req,res){
+  postMongo("Patient",req.body.data).then(function(collection){
+    collection.post(function(results){
+      res.send(results);
+    })
+  }).catch(function(err){
+    res.send(`ERROR: ${err}`).sendStatus(400);
+  });
+
+/**
+* @swagger 
+* /api/patient: 
+*   post: 
+*     summary: Create one "Patient" document
+*     requestBody:
+*       description: data
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               data:
+*                 type: object
+*           example: {"data":{"Patient_ID":1,"Name":"Antonio","Last_name":"Banderas","Phone_number":"3322764501","Email":"antonio.b@mail.com","Birth_date":{"date":660636000000},"RFC":"654321"}}
+*     responses: 
+*       200: 
+*         description: Documents posted
+*       400:
+*         description: Update error
+*         content:
+*           text/plain:
+*             schema:
+*               type: string
+*               example: Error [*err*]
+*/
+
+});
+
 router.get('/invoices',function(req,res){
     
     connectMongo("Invoice").then(function(collection){
@@ -231,6 +310,45 @@ router.patch('/invoice',function(req,res){
 */
 });
 
+router.post('/invoice',function(req,res){
+  postMongo("Invoice",req.body.data).then(function(collection){
+    collection.post(function(results){
+      res.send(results);
+    })
+  }).catch(function(err){
+    res.send(`ERROR: ${err}`).sendStatus(400);
+  });
+
+/**
+* @swagger 
+* /api/invoice: 
+*   post: 
+*     summary: Create one "invoice" document
+*     requestBody:
+*       description: data
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               data:
+*                 type: object
+*           example: {"data":{"Invoice_ID":1,"Appointment_ID":1,"items":[{"Code":"1","Description":"Limpieza","Cost":1000"}],"Payment_type":"Efectivo","Amount":1000}}
+*     responses: 
+*       200: 
+*         description: Documents posted
+*       400:
+*         description: Update error
+*         content:
+*           text/plain:
+*             schema:
+*               type: string
+*               example: Error [*err*]
+*/
+
+});
+
 router.get('/appointments',function(req,res){
     
     connectMongo("Appointment").then(function(collection){
@@ -300,6 +418,45 @@ router.patch('/appointment',function(req,res){
 *               type: string
 *               example: Error [*err*]
 */
+});
+
+router.post('/appointment',function(req,res){
+  postMongo("Appointment",req.body.data).then(function(collection){
+    collection.post(function(results){
+      res.send(results);
+    })
+  }).catch(function(err){
+    res.send(`ERROR: ${err}`).sendStatus(400);
+  });
+
+/**
+* @swagger 
+* /api/appointment: 
+*   post: 
+*     summary: Create one "invoice" document
+*     requestBody:
+*       description: data
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               data:
+*                 type: object
+*           example: {"data":{"Appointment_ID":1,"Dentist_ID":100,"Patient_ID":1,"Cause":"Dolor de muelas","Description":"Llega usuario con cara inflamada","images":[""],"Date":{"date":1603865460000}}}
+*     responses: 
+*       200: 
+*         description: Documents posted
+*       400:
+*         description: Update error
+*         content:
+*           text/plain:
+*             schema:
+*               type: string
+*               example: Error [*err*]
+*/
+
 });
 
 module.exports = router;

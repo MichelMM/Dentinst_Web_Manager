@@ -66,4 +66,26 @@ function updateMongo(collectionName, filter, data, many) {
     });
 }
 
-module.exports = {connectMongo,updateMongo};
+function postMongo(collectionName, data) {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url, {
+            useUnifiedTopology: true
+        }, function (err, client) {
+            if(err == null){
+                const db = client.db();
+                const collection = db.collection(collectionName);
+                resolve({
+                    post: async function (callback){
+                        res = await collection.insertOne(data);
+                        callback(res);
+                        client.close();
+                    } 
+                });
+            }else{
+                reject(err);
+            }
+        });
+    });
+}
+
+module.exports = {connectMongo,updateMongo,postMongo};
