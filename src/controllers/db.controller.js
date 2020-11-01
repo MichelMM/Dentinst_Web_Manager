@@ -88,4 +88,24 @@ function postMongo(collectionName, data) {
     });
 }
 
-module.exports = {connectMongo,updateMongo,postMongo};
+function deleteMongo(collectionName, filter) {
+    return new Promise(function(resolve, reject) {
+        MongoClient.connect(url, {
+            useUnifiedTopology: true
+        }, function (err, client) {
+            if(err == null) {
+                const db = client.db();
+                const collection = db.collection(collectionName);
+                resolve({
+                    delete: async function(callback){
+                        res = await collection.deleteOne(filter);
+                        callback(res);
+                        client.close();
+                    }
+                });
+            }
+        });
+    });
+}
+
+module.exports = {connectMongo,updateMongo,postMongo, deleteMongo};

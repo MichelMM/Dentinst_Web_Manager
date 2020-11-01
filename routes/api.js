@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {connectMongo,updateMongo,postMongo} = require('./../src/controllers/db.controller');
+const {connectMongo, updateMongo, postMongo, deleteMongo} = require('./../src/controllers/db.controller');
 /** 
 * @swagger 
 * /api: 
@@ -88,8 +88,8 @@ router.patch('/dentist',function(req,res){
 */
 });
 
-router.post('/patient',function(req,res){
-  postMongo("Patient",req.body.data).then(function(collection){
+router.post('/dentist',function(req,res){
+  postMongo("Dentist",req.body.data).then(function(collection){
     collection.post(function(results){
       res.send(results);
     })
@@ -101,7 +101,7 @@ router.post('/patient',function(req,res){
 * @swagger 
 * /api/dentist: 
 *   post: 
-*     summary: Create one "Patient" document
+*     summary: Create one "Dentist" document
 *     requestBody:
 *       description: data
 *       required: true
@@ -125,6 +125,43 @@ router.post('/patient',function(req,res){
 *               example: Error [*err*]
 */
 
+});
+
+router.delete('/dentist', function(req, res){
+  deleteMongo("Dentist", req.body.filter).then(function(collection){
+    collection.delete(function(results) {
+      res.send(results);
+    })
+  }).catch(function(err) {
+    res.send(`ERROR: ${err}`).sendStatus(400);
+  });
+/**
+* @swagger 
+* /api/dentist: 
+*   delete: 
+*     summary: Delete one "Dentist" document
+*     requestBody:
+*       description: filter, has to be the main ID of the object
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               filter:
+*                 type: object
+*           example: {"filter": {"Dentist_ID":1}}
+*     responses: 
+*       200: 
+*         description: Document deleted 
+*       400:
+*         description: Delete error
+*         content:
+*           text/plain:
+*             schema:
+*               type: string
+*               example: Error [*err*]
+*/
 });
 
 router.get('/patients',function(req,res){
@@ -238,6 +275,43 @@ router.post('/patient',function(req,res){
 
 });
 
+router.delete('/patient', function(req, res){
+  deleteMongo("Patient", req.body.filter).then(function(collection){
+    collection.delete(function(results) {
+      res.send(results);
+    })
+  }).catch(function(err) {
+    res.send(`ERROR: ${err}`).sendStatus(400);
+  });
+/**
+* @swagger 
+* /api/patient: 
+*   delete: 
+*     summary: Delete one "Patient" document
+*     requestBody:
+*       description: filter, has to be the main ID of the object
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               filter:
+*                 type: object
+*           example: {"filter": {"Patient_ID":1}}
+*     responses: 
+*       200: 
+*         description: Document deleted 
+*       400:
+*         description: Delete error
+*         content:
+*           text/plain:
+*             schema:
+*               type: string
+*               example: Error [*err*]
+*/
+});
+
 router.get('/invoices',function(req,res){
     
     connectMongo("Invoice").then(function(collection){
@@ -349,6 +423,43 @@ router.post('/invoice',function(req,res){
 
 });
 
+router.delete('/invoice', function(req, res){
+  deleteMongo("Invoice", req.body.filter).then(function(collection){
+    collection.delete(function(results) {
+      res.send(results);
+    })
+  }).catch(function(err) {
+    res.send(`ERROR: ${err}`).sendStatus(400);
+  });
+/**
+* @swagger 
+* /api/invoice: 
+*   delete: 
+*     summary: Delete one "Invoice" document
+*     requestBody:
+*       description: filter, has to be the main ID of the object
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               filter:
+*                 type: object
+*           example: {"filter": {"Invoice_ID":1}}
+*     responses: 
+*       200: 
+*         description: Document deleted 
+*       400:
+*         description: Delete error
+*         content:
+*           text/plain:
+*             schema:
+*               type: string
+*               example: Error [*err*]
+*/
+});
+
 router.get('/appointments',function(req,res){
     
     connectMongo("Appointment").then(function(collection){
@@ -433,7 +544,7 @@ router.post('/appointment',function(req,res){
 * @swagger 
 * /api/appointment: 
 *   post: 
-*     summary: Create one "invoice" document
+*     summary: Create one "Appointment" document
 *     requestBody:
 *       description: data
 *       required: true
@@ -457,6 +568,43 @@ router.post('/appointment',function(req,res){
 *               example: Error [*err*]
 */
 
+});
+
+router.delete('/appointment', function(req, res){
+  deleteMongo("Appointment", req.body.filter).then(function(collection){
+    collection.delete(function(results) {
+      res.send(results);
+    })
+  }).catch(function(err) {
+    res.send(`ERROR: ${err}`).sendStatus(400);
+  });
+/**
+* @swagger 
+* /api/appointment: 
+*   delete: 
+*     summary: Delete one "Appointment" document
+*     requestBody:
+*       description: filter, has to be the main ID of the object
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               filter:
+*                 type: object
+*           example: {"filter": {"Appointment_ID":1}}
+*     responses: 
+*       200: 
+*         description: Document deleted 
+*       400:
+*         description: Delete error
+*         content:
+*           text/plain:
+*             schema:
+*               type: string
+*               example: Error [*err*]
+*/
 });
 
 module.exports = router;
