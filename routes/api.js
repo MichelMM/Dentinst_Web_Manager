@@ -27,8 +27,7 @@ router.get('/dentists',function(req,res){
 });
 
 router.get('/dentist',function(req,res){
-
-    connectMongo("Dentist",req.body.filter).then(function(collection){
+    connectMongo("Dentist",JSON.parse(req.query.filter)).then(function(collection){
         collection.find(function(results){
             res.send(results);
         })
@@ -177,7 +176,7 @@ router.get('/patients',function(req,res){
 
 router.get('/patient',function(req,res){
     
-    connectMongo("Patient",req.body.filter).then(function(collection){
+    connectMongo("Patient",JSON.parse(req.query.filter)).then(function(collection){
         collection.find(function(results){
           res.send(results);
         })
@@ -325,7 +324,7 @@ router.get('/invoices',function(req,res){
 
 router.get('/invoice',function(req,res){
     
-    connectMongo("Invoice",req.body.filter).then(function(collection){
+    connectMongo("Invoice",JSON.parse(req.query.filter)).then(function(collection){
         collection.find(function(results){
             res.send(results);
         })
@@ -472,7 +471,7 @@ router.get('/appointments',function(req,res){
 });
 
 router.get('/appointment',function(req,res){
-    connectMongo("Appointment",req.body.filter).then(function(collection){
+    connectMongo("Appointment",JSON.parse(req.query.filter)).then(function(collection){
         collection.find(function(results){
           res.send(results);
         })
