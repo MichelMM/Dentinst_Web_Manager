@@ -1,5 +1,6 @@
 require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
+const bcrypt = require("bcryptjs");
 let url = process.env.DB_HOST;
 const user = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
@@ -7,6 +8,10 @@ const dbname = process.env.DB_NAME;
 
 url = url.replace("<user>",user).replace("<password>",password).replace("<dbname>",dbname);
 
+
+function getHashedPassword(pass) {
+    return bcrypt.hashSync(pass,12)
+}
 
 function connectMongo(collectionName, filter) {
     return new Promise(function (resolve, reject) {
@@ -70,6 +75,15 @@ function updateMongo(collectionName, filter, data, many) {
 }
 
 function postMongo(collectionName, data) {
+    return new Promise(function (resolve,reject) {
+        resolve({
+            post: function (callback){
+                res = {hash:getHashedPassword(data.Password)};
+                callback(res);
+            }
+        })
+    })
+/////////////////////////////////////////////////////////////////////////El código de arriba es unicamente de prueba, falta integrarlo con el de abajo
     return new Promise(function (resolve, reject) {
         MongoClient.connect(url, {
             useUnifiedTopology: true
