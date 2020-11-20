@@ -41,7 +41,7 @@ class UserController {
     // }
     
     login(req, res) {
-        const hashedPassword = getHashedPassword(req.body.password);
+        const hashedPassword = getHashedPassword(req.body.data.password);
 
         User.validate(req.body.email, hashedPassword).then(result => {
             console.log('Result usuario', result);
