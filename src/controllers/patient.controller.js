@@ -2,8 +2,8 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const db = require('./db.controller');
 require('dotenv').config();
-const Token = require('./../models/token');
-const User = require('./../models/user');
+const Token = require('../models/token');
+const Patient = require('../models/patient');
 
 const { OAuth2Client } = require('google-auth-library');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -19,7 +19,7 @@ function getHashedPassword(pwd) {
     return hashedPassword;
 }
 
-class UserController {
+class PatientController {
 
     // index(req, res) {
     //     User.find({}).then(results => {
@@ -43,7 +43,7 @@ class UserController {
     login(req, res) {
         const hashedPassword = getHashedPassword(req.body.data.password);
 
-        User.validate(req.body.email, hashedPassword).then(result => {
+        Patient.validate(req.body.email, hashedPassword).then(result => {
             console.log('Result usuario', result);
             if (result) {
                 Token.create(result._id).then(tokenResult => {
@@ -68,36 +68,36 @@ class UserController {
         }).then(googleResponse => {
             const responseData = googleResponse.getPayload();
             const email = responseData.email;
-            User.findOne({
+            Patient.findOne({
                 email: email
             }).then(response => {
                 if (response) {
                     console.log('Found user: ', response);
                     if (!response.googleId) {
                         console.log('Does not have google ID');
-                        User.updateOne({
+                        Patient.updateOne({
                             email: email
                         }, {
                             $set: {
                                 googleId: req.body.id
                             }
                         }).then(() => {
-                            UserController.createToken(response._id, res);
+                            PatientController.createToken(response._id, res);
                         }).catch(err => {
                             console.log('Failed to update user', err);
                         });
                     } else {
                         console.log('Already has google ID');
-                        UserController.createToken(response._id, res);
+                        PatientController.createToken(response._id, res);
                     }
                 } else {
                     // Crear
-                    User.create({
+                    Patient.create({
                         name: req.body.name,
                         email: email,
                         googleId: req.body.id
                     }).then(response => {
-                        UserController.createToken(response.insertedId, res);
+                        PatientController.createToken(response.insertedId, res);
                     });
                 }
             }).catch(err => {
@@ -136,7 +136,8 @@ class UserController {
     // }
 
     signup(req, res) {
-        db('users').then(collection => {
+        db('Patient').then(collection => {
+            console.log(req.body)
             const hashedPassword = getHashedPassword(req.body.password);
             collection.insertOne({
                 name: req.body.name,
@@ -180,4 +181,4 @@ class UserController {
     }
 }
 
-module.exports = new UserController();
+module.exports = new PatientController();

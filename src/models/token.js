@@ -2,7 +2,7 @@ const crypto = require('crypto');
 //const db = require('./../controllers/db.controller');
 const DBModel = require('./db');
 
-const User = require('./user');
+const User = require('./patient');
 
 class Token extends DBModel {
 

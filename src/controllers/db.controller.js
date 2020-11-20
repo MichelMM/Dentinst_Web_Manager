@@ -5,6 +5,8 @@ let url = process.env.DB_HOST;
 const user = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
 const dbname = process.env.DB_NAME;
+const Token = require('../models/token');
+const Patient = require('../models/patient');
 
 url = url.replace("<user>",user).replace("<password>",password).replace("<dbname>",dbname);
 
@@ -75,15 +77,6 @@ function updateMongo(collectionName, filter, data, many) {
 }
 
 function postMongo(collectionName, data) {
-    return new Promise(function (resolve,reject) {
-        resolve({
-            post: function (callback){
-                res = {hash:getHashedPassword(data.Password)};
-                callback(res);
-            }
-        })
-    })
-/////////////////////////////////////////////////////////////////////////El código de arriba es unicamente de prueba, falta integrarlo con el de abajo
     return new Promise(function (resolve, reject) {
         MongoClient.connect(url, {
             useUnifiedTopology: true
@@ -125,4 +118,71 @@ function deleteMongo(collectionName, filter) {
     });
 }
 
-module.exports = {connectMongo,updateMongo,postMongo, deleteMongo};
+function singupPatinentMongo(collectionName, data) {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url, {
+            useUnifiedTopology: true
+        }, function (err, client) {
+            if(err == null){
+                const db = client.db();
+                const collection = db.collection(collectionName);
+                const hashedPassword = getHashedPassword(data.Password);
+                resolve({
+                    post: async function (callback){
+                        res = await collection.insertOne({
+                            Name: data.Name,
+                            Last_name: data.Last_name,
+                            Phone_number: data.Phone_number,
+                            Email: data.Email,
+                            Birth_date: data.Birth_date,
+                            RFC: data.RFC,
+                            Password: hashedPassword
+                        });
+                        callback(res);
+                        client.close();
+                    } 
+                });
+            }else{
+                reject(err);
+            }
+        });
+    });
+}
+
+function singinPatinentMongo(collectionName, data) {
+        return new Promise(function (resolve, reject) {
+            MongoClient.connect(url, {
+                useUnifiedTopology: true
+            }, async function (err, client) {
+                if(err == null){
+                    const db = client.db();
+                    let collection = db.collection("Patient");
+                    const hashedPassword = getHashedPassword(data.password);
+
+                    res = await collection.find({Email:data.email,Password:hashedPassword}|| {});
+                    console.log(res.Phone_number);
+                    collection = db.collection(collectionName);
+                    resolve({
+                        post: async function (callback){
+                            res = await collection.insertOne({
+                                Name: data.Name,
+                                Last_name: data.Last_name,
+                                Phone_number: data.Phone_number,
+                                Email: data.Email,
+                                Birth_date: data.Birth_date,
+                                RFC: data.RFC,
+                                Password: hashedPassword
+                            });
+                            callback(res);
+                            client.close();
+                        } 
+                    });
+                }else{
+                    reject(err);
+                }
+            });
+        });
+    }
+
+
+module.exports = {connectMongo,updateMongo,postMongo, deleteMongo,singupPatinentMongo,singinPatinentMongo};
