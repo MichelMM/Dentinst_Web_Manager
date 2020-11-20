@@ -2,6 +2,9 @@ const express = require('express');
 const Token = require('../src/models/token');
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const { OAuth2Client } = require('google-auth-library');
+const Patient = require('../src/models/patient');
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const {
   connectMongo,
   updateMongo,
@@ -13,7 +16,7 @@ const {
 const PatientController = require('../src/controllers/patient.controller');
 
 function getHashedPassword(pass) {
-  return bcrypt.hashSync(pass,12)
+  return bcrypt.hashSync(pass, 12)
 }
 
 
@@ -40,7 +43,7 @@ router.get('/dentists', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 });
 
@@ -50,7 +53,7 @@ router.get('/dentist', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 });
 
@@ -60,7 +63,7 @@ router.patch('/dentist', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 
   /**
@@ -111,7 +114,7 @@ router.post('/dentist', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 
   /**
@@ -150,7 +153,7 @@ router.delete('/dentist', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
   /**
    * @swagger 
@@ -190,7 +193,7 @@ router.get('/patients', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 });
 
@@ -201,7 +204,7 @@ router.get('/patient', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 });
 
@@ -211,7 +214,7 @@ router.patch('/patient', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
   /**
    * @swagger 
@@ -261,7 +264,7 @@ router.post('/patient', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 
   /**
@@ -300,7 +303,7 @@ router.delete('/patient', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
   /**
    * @swagger 
@@ -340,7 +343,7 @@ router.get('/invoices', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 });
 
@@ -351,7 +354,7 @@ router.get('/invoice', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 });
 
@@ -361,7 +364,7 @@ router.patch('/invoice', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
   /**
    * @swagger 
@@ -411,7 +414,7 @@ router.post('/invoice', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 
   /**
@@ -450,7 +453,7 @@ router.delete('/invoice', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
   /**
    * @swagger 
@@ -490,7 +493,7 @@ router.get('/appointments', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 });
 
@@ -500,7 +503,7 @@ router.get('/appointment', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 });
 
@@ -510,7 +513,7 @@ router.patch('/appointment', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
   /**
    * @swagger 
@@ -560,7 +563,7 @@ router.post('/appointment', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 
   /**
@@ -599,7 +602,7 @@ router.delete('/appointment', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
   /**
    * @swagger 
@@ -631,9 +634,92 @@ router.delete('/appointment', function (req, res) {
 });
 
 //////////////////////LOGINS//////////////////////
-router.post('/auth/google', PatientController.googleLogin);
+router.post('/auth/google', function (req, res) {
+  googleClient.verifyIdToken({
+    idToken: req.body.idToken
+  }).then(googleResponse => {
+    const responseData = googleResponse.getPayload();
+    const email = responseData.email;
+    console.log('------------------------------------');
+    console.log(email);
+    console.log('------------------------------------');
+    Patient.findOne({
+      Email: email
+    }).then(response => {
+      if (response) {
+        console.log('Found user: ', response);
+        if (!response.googleId) {
+          console.log('Does not have google ID');
+          Patient.updateOne({
+            email: email
+          }, {
+            $set: {
+              googleId: req.body.id
+            }
+          }).then(() => {
+            // PatientController.createToken(response._id, res);
 
-router.post('/auth',function (req, res) {
+            tokenStuff = Token.create(response._id)
+            tokenStuff[0].then(tokenResult => {
+              // console.log('Created token: ', tokenResult);
+              res.send(tokenStuff[1]);
+
+            }).catch(err => {
+              console.log('Failed to create token', err);
+            });
+
+          }).catch(err => {
+            console.log('Failed to update user', err);
+          });
+        } else {
+          console.log('Already has google ID');
+          // PatientController.createToken(response._id, res);
+          tokenStuff = Token.create(response._id)
+          tokenStuff[0].then(tokenResult => {
+            // console.log('Created token: ', tokenResult);
+            res.send(tokenStuff[1]);
+
+          }).catch(err => {
+            console.log('Failed to create token', err);
+          });
+        }
+      } else {
+        // Crear
+        console.log('------------------------------------');
+        console.log("Correo no encontrado");
+        console.log('------------------------------------');
+        Patient.create({
+          Name: req.body.name,
+          Email: email,
+          googleId: req.body.id
+        }, { timestamps: false }).then(response => {
+          // PatientController.createToken(response.insertedId, res);
+          Patient.findOne({
+            Email: email
+          }).then(response => {
+            console.log('----------------USR CREADO----------------');
+            console.log(response);
+            console.log('------------------------------------');
+            tokenStuff = Token.create(response._id)
+            tokenStuff[0].then(tokenResult => {
+              res.send(tokenStuff[1]);
+            }).catch(err => {
+              console.log('Failed to create token', err);
+            });
+          }).catch(err => {
+            res.status(400).send();
+          })
+        });
+      }
+    }).catch(err => {
+      res.status(400).send();
+    });
+  }).catch(err => {
+    res.status(400).send();
+  })
+});
+
+router.post('/auth', function (req, res) {
   //Buscar al paciente
   console.log('----------------INTRO------------------');
   console.log(req.body.data);
@@ -651,36 +737,28 @@ router.post('/auth',function (req, res) {
       console.log(results);
       console.log('------------------------------------');
       console.log('----------------COMPARE----------------');
-      console.log(bcrypt.compareSync(req.body.data.Password,results[0].Password));
+      console.log(bcrypt.compareSync(req.body.data.Password, results[0].Password));
       console.log('------------------------------------');
-      
-    
-      Token.create(results[0]._id).then(tokenResult => {
-        console.log('Created token: ', tokenResult);
+      if (bcrypt.compareSync(req.body.data.Password, results[0].Password)) {
+        //La contraseña coincide
+        tokenStuff = Token.create(results[0]._id)
+        tokenStuff[0].then(tokenResult => {
+          // console.log('Created token: ', tokenResult);
+          res.send(tokenStuff[1]);
 
-        let obj2 = {
-          id: results[0]._id,
-          token: tokenResult.ops[0].token
-        }
-
-        console.log('-----------------OBJ2-------------------');
-        console.log({token:obj2.token});
-        console.log('------------------------------------');
-        postMongo("Token", obj2).then(function (collection) {
-          collection.post(function (results) {
-            res.send({token:obj2.token});
-          })
-        }).catch(function (err) {
-          res.send(`ERROR: ${err}`).sendStatus(400);
+        }).catch(err => {
+          console.log('Failed to create token', err);
         });
+      } else {
+        //Contraseña incorrecta
+        res.status(401).send(`Contraseña incorrecta`);
+      }
 
-      }).catch(err => {
-        console.log('Failed to create token', err);
-      });
-      
+
+
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   });
 
   // singinPatinentMongo("Token", req.body.data).then(function (collection) {
@@ -688,7 +766,7 @@ router.post('/auth',function (req, res) {
   //     res.send(results);
   //   })
   // }).catch(function (err) {
-  //   res.send(`ERROR: ${err}`).sendStatus(400);
+  //   res.status(400).send(`ERROR: ${err}`);
   // })
 
 });
@@ -699,7 +777,7 @@ router.post('/signup', function (req, res) {
       res.send(results);
     })
   }).catch(function (err) {
-    res.send(`ERROR: ${err}`).sendStatus(400);
+    res.status(400).send(`ERROR: ${err}`);
   })
 
 });

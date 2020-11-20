@@ -7,7 +7,7 @@ const User = require('./patient');
 class Token extends DBModel {
 
     constructor() {
-        super('tokens');
+        super('Token');
     }
 
     validate(token, userId) {
@@ -22,13 +22,20 @@ class Token extends DBModel {
     create(userId) {
         const date = new Date();
         const expire_date = date.setHours(date.getHours() + 1);
+        console.log('-----TOKEN DENTRO-------------------------------');
+        console.log(userId);
+        console.log('------------------------------------');
         const token = crypto.scryptSync(userId + new Date().getTime(), 'salt', 48).toString('hex');
 
-        return super.create({
-            userId: userId,
-            token: token,
-            expire_date: expire_date
-        }, { timestamps: false });
+        return [super.updateOrCreate({
+            userId: userId
+        }, {
+            $set:{
+                userId: userId,
+                token: token,
+                expire_date: expire_date
+            }
+        },{ upsert: true }),{token}]
     }
 
     findByToken(token) {

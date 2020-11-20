@@ -53,7 +53,6 @@ function updateMongo(collectionName, filter, data, many) {
                 if (many || false) {//Update many or one
                     resolve({
                         update: async function (callback) {
-                            //Update first document after filter
                             res = await collection.updateMany(filter|| {}, data);
                             callback({matchedCount:res.matchedCount,modifiedCount:res.modifiedCount});
                             client.close();
@@ -62,7 +61,7 @@ function updateMongo(collectionName, filter, data, many) {
                 }else{
                     resolve({
                         update: async function (callback) {
-                            res = await collection.updateOne(filter|| {}, data);
+                            res = await collection.updateOne(filter|| {}, data, {upsert:true});//Actualiza o crea
                             callback({matchedCount:res.matchedCount,modifiedCount:res.modifiedCount});
                             client.close();
                         }
