@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const {connectMongo, updateMongo, postMongo, deleteMongo} = require('./../src/controllers/db.controller');
+const usersController = require('./../src/controllers/user.controller');
+
+
 /** 
 * @swagger 
 * /api: 
@@ -14,6 +17,8 @@ const {connectMongo, updateMongo, postMongo, deleteMongo} = require('./../src/co
 router.get('/', (req, res) => {
     res.send('api works');
 });
+
+//////////////////////DENTISTS//////////////////////
 
 router.get('/dentists',function(req,res){
     
@@ -163,6 +168,8 @@ router.delete('/dentist', function(req, res){
 */
 });
 
+//////////////////////PATIENTS//////////////////////
+
 router.get('/patients',function(req,res){
     
     connectMongo("Patient").then(function(collection){
@@ -310,6 +317,8 @@ router.delete('/patient', function(req, res){
 *               example: Error [*err*]
 */
 });
+
+//////////////////////INVOICES//////////////////////
 
 router.get('/invoices',function(req,res){
     
@@ -459,6 +468,8 @@ router.delete('/invoice', function(req, res){
 */
 });
 
+//////////////////////APPOINTMENTS//////////////////////
+
 router.get('/appointments',function(req,res){
     
     connectMongo("Appointment").then(function(collection){
@@ -605,5 +616,10 @@ router.delete('/appointment', function(req, res){
 *               example: Error [*err*]
 */
 });
+
+//////////////////////LOGINS//////////////////////
+router.post('/auth/google', usersController.googleLogin);
+router.post('/auth', usersController.login);
+router.post('/signup', usersController.signup);
 
 module.exports = router;
