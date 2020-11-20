@@ -1,5 +1,7 @@
 const express = require('express');
+const Token = require('../src/models/token');
 const router = express.Router();
+const bcrypt = require("bcryptjs");
 const {
   connectMongo,
   updateMongo,
@@ -9,6 +11,10 @@ const {
   singinPatinentMongo
 } = require('./../src/controllers/db.controller');
 const PatientController = require('../src/controllers/patient.controller');
+
+function getHashedPassword(pass) {
+  return bcrypt.hashSync(pass,12)
+}
 
 
 /** 
@@ -626,14 +632,64 @@ router.delete('/appointment', function (req, res) {
 
 //////////////////////LOGINS//////////////////////
 router.post('/auth/google', PatientController.googleLogin);
+
 router.post('/auth',function (req, res) {
-  singinPatinentMongo("Token", req.body.data).then(function (collection) {
-    collection.post(function (results) {
-      res.send(results);
+  //Buscar al paciente
+  console.log('----------------INTRO------------------');
+  console.log(req.body.data);
+  console.log('------------------------------------');
+  let obj = {
+    Email: req.body.data.Email
+  }
+  console.log('----------------OBJ--------------------');
+  console.log(obj);
+  console.log('------------------------------------');
+  connectMongo("Patient", obj).then(function (collection) {
+    collection.find(function (results) {
+      //results tiene los datos del usuario
+      console.log('-----------------RES----------------');
+      console.log(results);
+      console.log('------------------------------------');
+      console.log('----------------COMPARE----------------');
+      console.log(bcrypt.compareSync(req.body.data.Password,results[0].Password));
+      console.log('------------------------------------');
+      
+    
+      Token.create(results[0]._id).then(tokenResult => {
+        console.log('Created token: ', tokenResult);
+
+        let obj2 = {
+          id: results[0]._id,
+          token: tokenResult.ops[0].token
+        }
+
+        console.log('-----------------OBJ2-------------------');
+        console.log({token:obj2.token});
+        console.log('------------------------------------');
+        postMongo("Token", obj2).then(function (collection) {
+          collection.post(function (results) {
+            res.send({token:obj2.token});
+          })
+        }).catch(function (err) {
+          res.send(`ERROR: ${err}`).sendStatus(400);
+        });
+
+      }).catch(err => {
+        console.log('Failed to create token', err);
+      });
+      
     })
   }).catch(function (err) {
     res.send(`ERROR: ${err}`).sendStatus(400);
-  })
+  });
+
+  // singinPatinentMongo("Token", req.body.data).then(function (collection) {
+  //   collection.post(function (results) {
+  //     res.send(results);
+  //   })
+  // }).catch(function (err) {
+  //   res.send(`ERROR: ${err}`).sendStatus(400);
+  // })
 
 });
 
