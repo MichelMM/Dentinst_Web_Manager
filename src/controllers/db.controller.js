@@ -25,9 +25,6 @@ function connectMongo(collectionName, filter) {
                 const collection = db.collection(collectionName);
                 resolve({
                     find: function (callback) {
-                        console.log('-----------------DB CONTROLLER-----------------');
-                        console.log(filter);
-                        console.log('------------------------------------');
                         collection.find(filter|| {}).toArray(function (err, res) {
                             callback(res);
                             client.close();
