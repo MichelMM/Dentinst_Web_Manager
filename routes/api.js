@@ -2,16 +2,16 @@ const express = require('express');
 const Token = require('../src/models/token');
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const { OAuth2Client } = require('google-auth-library');
+const {
+  OAuth2Client
+} = require('google-auth-library');
 const Patient = require('../src/models/patient');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const {
   connectMongo,
   updateMongo,
   postMongo,
-  deleteMongo,
-  singupPatinentMongo,
-  singinPatinentMongo
+  deleteMongo
 } = require('./../src/controllers/db.controller');
 const PatientController = require('../src/controllers/patient.controller');
 
@@ -692,7 +692,9 @@ router.post('/auth/google', function (req, res) {
           Name: req.body.name,
           Email: email,
           googleId: req.body.id
-        }, { timestamps: false }).then(response => {
+        }, {
+          timestamps: false
+        }).then(response => {
           // PatientController.createToken(response.insertedId, res);
           Patient.findOne({
             Email: email
@@ -761,25 +763,27 @@ router.post('/auth', function (req, res) {
     res.status(400).send(`ERROR: ${err}`);
   });
 
-  // singinPatinentMongo("Token", req.body.data).then(function (collection) {
-  //   collection.post(function (results) {
-  //     res.send(results);
-  //   })
-  // }).catch(function (err) {
-  //   res.status(400).send(`ERROR: ${err}`);
-  // })
-
 });
 
+
 router.post('/signup', function (req, res) {
-  singupPatinentMongo("Patient", req.body.data).then(function (collection) {
+  const hashedPassword = getHashedPassword(req.body.data.Password);
+  const obj = {
+    Name: req.body.data.Name,
+    Last_name: req.body.data.Last_name,
+    Phone_number: req.body.data.Phone_number,
+    Email: req.body.data.Email,
+    Birth_date: req.body.data.Birth_date,
+    RFC: req.body.data.RFC,
+    Password: hashedPassword
+  }
+  postMongo("Patient", obj).then(function (collection) {
     collection.post(function (results) {
       res.send(results);
     })
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
-  })
-
+  });
 });
 
 module.exports = router;
