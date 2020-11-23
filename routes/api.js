@@ -699,9 +699,10 @@ router.post('/auth/google', function (req, res) {
         console.log("Correo no encontrado");
         console.log('------------------------------------');
         Patient.create({
-          Name: req.body.name,
+          Name: req.body.firstName,
           Email: email,
-          googleId: req.body.id
+          googleId: req.body.id,
+          Last_name:req.body.lastName
         }, {
           timestamps: false
         }).then(response => {
