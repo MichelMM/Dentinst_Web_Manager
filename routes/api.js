@@ -2,6 +2,7 @@ const express = require('express');
 const Token = require('../src/models/token');
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const ObjectId = require('mongodb').ObjectId;
 const {
   OAuth2Client
 } = require('google-auth-library');
@@ -187,7 +188,6 @@ router.delete('/dentist', function (req, res) {
 //////////////////////PATIENTS//////////////////////
 
 router.get('/patients', function (req, res) {
-
   connectMongo("Patient").then(function (collection) {
     collection.find(function (results) {
       res.send(results);
@@ -198,8 +198,18 @@ router.get('/patients', function (req, res) {
 });
 
 router.get('/patient', function (req, res) {
-
   connectMongo("Patient", JSON.parse(req.query.filter)).then(function (collection) {
+    collection.find(function (results) {
+      res.send(results);
+    })
+  }).catch(function (err) {
+    res.status(400).send(`ERROR: ${err}`);
+  });
+});
+
+router.get('/patientId', function (req, res) {
+  var o_id = new ObjectId(JSON.parse(req.query.filter))
+  connectMongo("Patient", {_id:o_id}).then(function (collection) {
     collection.find(function (results) {
       res.send(results);
     })
@@ -779,6 +789,16 @@ router.post('/signup', function (req, res) {
   }
   postMongo("Patient", obj).then(function (collection) {
     collection.post(function (results) {
+      res.send(results);
+    })
+  }).catch(function (err) {
+    res.status(400).send(`ERROR: ${err}`);
+  });
+});
+
+router.get('/token', function (req, res) {
+  connectMongo("Token", {token:req.query.filter}).then(function (collection) {
+    collection.find(function (results) {
       res.send(results);
     })
   }).catch(function (err) {
