@@ -219,6 +219,9 @@ router.get('/patientId', function (req, res) {
 });
 
 router.patch('/patient', function (req, res) {
+  if(req.body.Password){
+    req.body.Password = getHashedPassword(req.body.Password);
+  }
   updateMongo("Patient", req.body.filter, req.body.data, req.body.many).then(function (collection) {
     collection.update(function (results) {
       res.send(results);

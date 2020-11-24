@@ -15,11 +15,14 @@ const swaggerOptions = require('./swagger.config');
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 //Handlebars
 const handlebars = require('express-handlebars');
+//CORS
+const cors = require('cors');
 //Mongodb
 const connectMongo = require('./src/controllers/db.controller');
 //Port
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
