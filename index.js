@@ -50,10 +50,30 @@ app.use('/api', jsonParser, r_api);
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log('app is running in port ' + port);
 });
 
+const socketIo = require('socket.io');
 
+const Io = socketIo(server, {
+  cors: {
+    origin: process.env.SOCKET_ORIGIN,
+    methods: ['GET', 'POST'],
+    allowedHeaders: [],
+    credentials: true
+  }
+});
 
+Io.on('connection', socket => {
+  console.log('New user connected to website!');
 
+  socket.on('disconnect', () => {
+    console.log('User disconnected from website :(');
+  });
+
+  socket.on('appointmentDone', data => {
+    console.log('User made an appointment, check:', data);
+  });
+  
+});
