@@ -82,9 +82,19 @@ function postMongo(collectionName, data) {
                 const collection = db.collection(collectionName);
                 resolve({
                     post: async function (callback){
-                        res = await collection.insertOne(data);
-                        callback(res);
-                        client.close();
+                        // res = await collection.insertOne(data);
+                        await collection.insertOne(data).then(respuesta=>{
+                            callback(respuesta)
+                            client.close();
+                        }).catch(err=>{
+                            console.log('------------------------------------');
+                            console.log("ERRROR AL CREAR DENTISTA");
+                            console.log('------------------------------------');
+                            callback({err:"ERROR"})
+                            client.close();
+                        })
+                        // callback(res);
+                        // client.close();
                     } 
                 });
             }else{
