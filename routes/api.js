@@ -58,6 +58,17 @@ router.get('/dentist', function (req, res) {
   });
 });
 
+router.get('/dentistId', function (req, res) {
+  var o_id = new ObjectId(JSON.parse(req.query.filter))
+  connectMongo("Denstist", {_id:o_id}).then(function (collection) {
+    collection.find(function (results) {
+      res.send(results);
+    })
+  }).catch(function (err) {
+    res.status(400).send(`ERROR: ${err}`);
+  });
+});
+
 router.patch('/dentist', function (req, res) {
   updateMongo("Dentist", req.body.filter, req.body.data, req.body.many).then(function (collection) {
     collection.update(function (results) {

@@ -144,4 +144,5 @@ Io.on('connection', socket => {
     console.log(`User ${data.patientName} ${data.patientLastName} made a new appointment`);
   });
 
+  
 });
