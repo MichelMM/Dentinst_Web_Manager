@@ -780,6 +780,48 @@ router.post('/auth', function (req, res) {
 });
 
 
+router.post('/dentistAuth', function (req, res) {
+  //Buscar al paciente
+  console.log('----------------INTRO_Dentist------------------');
+  console.log(req.body.data);
+  console.log('------------------------------------');
+  let obj = {
+    Email: req.body.data.Email
+  }
+  console.log('----------------OBJ--------------------');
+  console.log(obj);
+  console.log('------------------------------------');
+  connectMongo("Dentist", obj).then(function (collection) {
+    collection.find(function (results) {
+      //results tiene los datos del usuario
+      console.log('-----------------RES----------------');
+      console.log(results);
+      console.log('------------------------------------');
+      console.log('----------------COMPARE----------------');
+      console.log(bcrypt.compareSync(req.body.data.Password, results[0].Password));
+      console.log('------------------------------------');
+      if (bcrypt.compareSync(req.body.data.Password, results[0].Password)) {
+        //La contraseña coincide
+        tokenStuff = Token.create(results[0]._id)
+        tokenStuff[0].then(tokenResult => {
+          // console.log('Created token: ', tokenResult);
+          res.send(tokenStuff[1]);
+
+        }).catch(err => {
+          console.log('Failed to create token', err);
+        });
+      } else {
+        //Contraseña incorrecta
+        res.status(401).send(`Contraseña incorrecta`);
+      }
+    })
+  }).catch(function (err) {
+    res.status(400).send(`ERROR: ${err}`);
+  });
+
+});
+
+
 router.post('/signup', function (req, res) {
   const hashedPassword = getHashedPassword(req.body.data.Password);
   const obj = {
@@ -792,6 +834,30 @@ router.post('/signup', function (req, res) {
     Password: hashedPassword
   }
   postMongo("Patient", obj).then(function (collection) {
+    collection.post(function (results) {
+      res.send(results);
+    })
+  }).catch(function (err) {
+    res.status(400).send(`ERROR: ${err}`);
+  });
+});
+
+router.post('/dentistSignup', function (req, res) {
+  const hashedPassword = getHashedPassword(req.body.data.Password);
+  const obj = {
+    Name: req.body.data.Name,
+    Last_name: req.body.data.Last_name,
+    Phone_number: req.body.data.Phone_number,
+    Email: req.body.data.Email,
+    Birth_date: req.body.data.Birth_date,
+    RFC: req.body.data.RFC,
+    Password: hashedPassword,
+    Specialty: req.body.data.Specialty,
+    Social_media: req.body.data.Social_media,
+    Description: req.body.data.Description,
+    Image: req.body.data.Image
+  }
+  postMongo("Dentist", obj).then(function (collection) {
     collection.post(function (results) {
       res.send(results);
     })
