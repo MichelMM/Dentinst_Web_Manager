@@ -8,6 +8,10 @@ const r_api = require('./routes/api');
 //Http
 const axios = require("axios")
 const encodeUrl = require("encodeurl")
+//Images
+const multer = require("multer")
+const AWS = require("aws-sdk")
+const multerS3 = require("multer-s3")
 //Body parser
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -69,6 +73,31 @@ app.get("/whats", jsonParser, (req, res) => {
   }, 60000);
 
   res.send("todo ok")
+})
+
+/////////Images S3 realm/////////////////////////////////////
+let s3bucket = new AWS.S3({
+  accessKeyId: process.env.IAM_USER_KEY,
+  secretAccessKey: process.env.IAM_USER_SECRET,
+  Bucket: process.env.BUCKET_NAME
+})
+const multerStorage = multerS3({
+  s3: s3bucket,
+  bucket: process.env.BUCKET_NAME,
+  acl: "public-read",
+  key: function (req, file, cb) {
+    const ext = file.originalname.split(".").pop()
+    cb(null,`dentistProfile/${file.fieldname}-${Date.now()}.${ext}`)
+  }
+})
+
+const upload = multer({ storage: multerStorage, fileFilter: function (req, file, cb) {
+  cb(null,file.mimetype.startsWith("image"))
+}})
+
+
+app.post("/image", upload.single("image"),(req,res)=>{
+  res.send({location:req.file.location})
 })
 
 const server = app.listen(port, () => {
