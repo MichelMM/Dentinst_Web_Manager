@@ -60,7 +60,7 @@ router.get('/dentist', function (req, res) {
 
 router.get('/dentistId', function (req, res) {
   var o_id = new ObjectId(JSON.parse(req.query.filter))
-  connectMongo("Denstist", {_id:o_id}).then(function (collection) {
+  connectMongo("Dentist", {_id:o_id}).then(function (collection) {
     collection.find(function (results) {
       res.send(results);
     })
