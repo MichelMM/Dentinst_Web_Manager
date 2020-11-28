@@ -141,8 +141,8 @@ Io.on('connection', socket => {
   });
 
   socket.on('appointmentDone', data => {
-    console.log(`User ${data.patientName} ${data.patientLastName} made a new appointment`);
+    console.log(`User ${data.patientName} ${data.patientLastName} made a new appointment with dentist ID: ${data.dentistId}`);
+    socket.broadcast.emit('NewAppointment', data);
   });
-
   
 });
