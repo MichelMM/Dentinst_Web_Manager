@@ -1,3 +1,6 @@
+console.log('------------------------------------');
+console.log("Iniciando");
+console.log('------------------------------------');
 //app
 if(!process.env.NODE_PROD){//Preguntar si estamos en produccion
   require('dotenv').config();
@@ -29,9 +32,14 @@ const cors = require('cors');
 //Mongodb
 const connectMongo = require('./src/controllers/db.controller');
 //Port
+console.log('------------------------------------');
+console.log("Cargando puerto");
+console.log('------------------------------------');
 const port = process.env.PORT || 3000;
-
-app.use(cors());
+console.log('------------------------------------');
+console.log("Cors");
+console.log('------------------------------------');
+// app.use(cors());
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
