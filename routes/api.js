@@ -853,6 +853,7 @@ router.post('/signup', function (req, res) {
   });
 });
 
+
 router.post('/dentistSignup', function (req, res) {
   const hashedPassword = getHashedPassword(req.body.data.Password);
   const obj = {
