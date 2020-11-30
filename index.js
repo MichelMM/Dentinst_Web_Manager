@@ -30,7 +30,12 @@ const handlebars = require('express-handlebars');
 //CORS
 const cors = require('cors');
 //Mongodb
-const connectMongo = require('./src/controllers/db.controller');
+const {
+  connectMongo,
+  updateMongo,
+  postMongo,
+  deleteMongo
+} = require('./src/controllers/db.controller');
 //Port
 console.log('------------------------------------');
 console.log("Cargando puerto");
@@ -48,7 +53,6 @@ app.set('view engine', 'handlebars');
 app.set('views', 'src/views');
 
 app.get('/', function (req, res) {
-
   connectMongo('Dentist').then(function (collection) {
     collection.find(function (results) {
       res.render('index', { results: "correct" });
