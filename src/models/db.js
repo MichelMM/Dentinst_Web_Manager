@@ -1,4 +1,6 @@
-require('dotenv').config();
+if (!process.env.NODE_PROD) {//Preguntar si estamos en produccion
+  require('dotenv').config();
+}
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 
@@ -7,7 +9,7 @@ const user = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
 const dbname = process.env.DB_NAME;
 
-url = url.replace("<user>",user).replace("<password>",password).replace("<dbname>",dbname);
+url = url.replace("<user>", user).replace("<password>", password).replace("<dbname>", dbname);
 
 let clientConnection;
 
@@ -17,9 +19,9 @@ function getOptions(options, defaultOptions) {
 }
 
 function connectMongoDB() {
-  
+
   return new Promise((resolve, reject) => {
-    if(clientConnection) {
+    if (clientConnection) {
       resolve(clientConnection);
       return;
     }
@@ -27,8 +29,8 @@ function connectMongoDB() {
     MongoClient.connect(url, {
       useUnifiedTopology: true
     }, (err, client) => {
-      
-      if(err) {
+
+      if (err) {
         console.log('Failed to connect to the database');
         reject(err);
         return;
@@ -74,12 +76,12 @@ class DBModel {
     return new Promise((resolve, reject) => {
       let query = this.collection.find(filters);
 
-      if(options.limit) {
+      if (options.limit) {
         query = query.limit(options.limit);
       }
-      
+
       query.toArray((err, results) => {
-        if(err) {
+        if (err) {
           reject(err);
         } else {
           resolve(results);
@@ -105,9 +107,9 @@ class DBModel {
   create(data, options) {
     data = data || {};
     console.log('Will insert: ', data, this.collectionName);
-    options = getOptions(options, { timestamps:true });
+    options = getOptions(options, { timestamps: true });
 
-    if(!!options.timestamps) {
+    if (!!options.timestamps) {
       const now = new Date().getTime();
       data.created_at = now;
       data.updated_at = now;

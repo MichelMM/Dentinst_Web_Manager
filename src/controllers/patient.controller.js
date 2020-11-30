@@ -1,7 +1,9 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const db = require('./db.controller');
-require('dotenv').config();
+if (!process.env.NODE_PROD) {//Preguntar si estamos en produccion
+    require('dotenv').config();
+}
 const Token = require('../models/token');
 const Patient = require('../models/patient');
 
@@ -39,7 +41,7 @@ class PatientController {
     //         res.status(400).send(err);
     //     })
     // }
-    
+
     login(req, res) {
         const hashedPassword = getHashedPassword(req.body.data.password);
 
