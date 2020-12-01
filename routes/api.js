@@ -532,7 +532,8 @@ router.get('/appointment', function (req, res) {
 });
 
 router.patch('/appointment', function (req, res) {
-  updateMongo("Appointment", req.body.filter, req.body.data, req.body.many).then(function (collection) {
+  var o_id = new ObjectId(req.body.filter)
+  updateMongo("Appointment", {_id:o_id}, req.body.data, req.body.many).then(function (collection) {
     collection.update(function (results) {
       res.send(results);
     })
