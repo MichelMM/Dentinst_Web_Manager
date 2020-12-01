@@ -44,7 +44,7 @@ const port = process.env.PORT || 3000;
 console.log('------------------------------------');
 console.log("Cors");
 console.log('------------------------------------');
-// app.use(cors());
+app.use(cors());
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
