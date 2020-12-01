@@ -684,7 +684,7 @@ router.post('/auth/google', function (req, res) {
           }).then(() => {
             // PatientController.createToken(response._id, res);
 
-            tokenStuff = Token.create(response._id)
+            tokenStuff = Token.create(response._id,0)
             tokenStuff[0].then(tokenResult => {
               // console.log('Created token: ', tokenResult);
               res.send(tokenStuff[1]);
@@ -699,7 +699,7 @@ router.post('/auth/google', function (req, res) {
         } else {
           console.log('Already has google ID');
           // PatientController.createToken(response._id, res);
-          tokenStuff = Token.create(response._id)
+          tokenStuff = Token.create(response._id,0)
           tokenStuff[0].then(tokenResult => {
             // console.log('Created token: ', tokenResult);
             res.send(tokenStuff[1]);
@@ -728,7 +728,7 @@ router.post('/auth/google', function (req, res) {
             console.log('----------------USR CREADO----------------');
             console.log(response);
             console.log('------------------------------------');
-            tokenStuff = Token.create(response._id)
+            tokenStuff = Token.create(response._id,0)
             tokenStuff[0].then(tokenResult => {
               res.send(tokenStuff[1]);
             }).catch(err => {
@@ -769,7 +769,7 @@ router.post('/auth', function (req, res) {
       console.log('------------------------------------');
       if (bcrypt.compareSync(req.body.data.Password, results[0].Password)) {
         //La contraseña coincide
-        tokenStuff = Token.create(results[0]._id)
+        tokenStuff = Token.create(results[0]._id,0)
         tokenStuff[0].then(tokenResult => {
           // console.log('Created token: ', tokenResult);
           res.send(tokenStuff[1]);
@@ -814,7 +814,7 @@ router.post('/dentistAuth', function (req, res) {
       console.log('------------------------------------');
       if (bcrypt.compareSync(req.body.data.Password, results[0].Password)) {
         //La contraseña coincide
-        tokenStuff = Token.create(results[0]._id)
+        tokenStuff = Token.create(results[0]._id,1)
         tokenStuff[0].then(tokenResult => {
           // console.log('Created token: ', tokenResult);
           res.send(tokenStuff[1]);

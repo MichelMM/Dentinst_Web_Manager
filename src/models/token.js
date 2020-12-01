@@ -19,7 +19,7 @@ class Token extends DBModel {
         });
     }
 
-    create(userId) {
+    create(userId,userType) {
         const date = new Date();
         const expire_date = date.setHours(date.getHours() + 1);
         console.log('-----TOKEN DENTRO-------------------------------');
@@ -33,7 +33,8 @@ class Token extends DBModel {
             $set:{
                 userId: userId,
                 token: token,
-                expire_date: expire_date
+                expire_date: expire_date,
+                type: userType
             }
         },{ upsert: true }),{token}]
     }
