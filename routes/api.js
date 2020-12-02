@@ -509,8 +509,7 @@ router.get('/appointment', function (req, res) {
 });
 
 router.patch('/appointment', function (req, res) {
-  console.log(req.body)
-  var o_id = new ObjectId(JSON.parse(req.body.filter))
+  var o_id = new ObjectId(req.body.filter)
   updateMongo("Appointment", { _id: o_id }, req.body.data, req.body.many).then(function (collection) {
     collection.update(function (results) {
       res.send(results);
@@ -561,6 +560,7 @@ router.patch('/appointment', function (req, res) {
 });
 
 router.post('/appointment', function (req, res) {
+
   postMongo("Appointment", req.body.data).then(function (collection) {
     collection.post(function (results) {
       res.send(results);
@@ -600,7 +600,7 @@ router.post('/appointment', function (req, res) {
 });
 
 router.delete('/appointment', function (req, res) {
-  var o_id = new ObjectId(req.body.filter)
+  var o_id = new ObjectId(JSON.parse(req.body.filter))
   deleteMongo("Appointment", {_id:o_id}).then(function (collection) {
     collection.delete(function (results) {
       res.send(results);
