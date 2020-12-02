@@ -141,12 +141,12 @@ router.patch('/dentist', function (req, res) {
    *             type: object
    *             properties:
    *               filter:
-   *                 type: object
+   *                 type: string
    *               data:
    *                 type: object
    *               many:
    *                 type: boolean
-   *           example: {"data":{"$set":{"Name":"Miguel Robertooo"}}}
+   *           example: {"filter":{"Name":"Michel"},"data":{"$set":{"Name":"Michelangelo"}}}
    *     responses: 
    *       200: 
    *         description: Documents updated
@@ -357,7 +357,7 @@ router.patch('/patient', function (req, res) {
    *                 type: object
    *               many:
    *                 type: boolean
-   *           example: {"data":{"$set":{"Name":"Antonio Banderas"}}}
+   *           example: {"filter":{"Name":"Michel"},"data":{"$set":{"Name":"Michelangelo"}}}
    *     responses: 
    *       200: 
    *         description: Documents updated
@@ -536,7 +536,7 @@ router.patch('/appointment', function (req, res) {
    *                 type: object
    *               many:
    *                 type: boolean
-   *           example: {"filter":{"Appointment_ID":{"$eq":2}},"data":{"$set":{"Dentist_ID":100}}}
+   *           example: {"filter":5fc71caf81973b0017a0487f,"data":{"$set":{"Cause":"Swagger updates with patch"}}}
    *     responses: 
    *       200: 
    *         description: Documents updated
