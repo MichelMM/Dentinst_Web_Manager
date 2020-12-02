@@ -600,6 +600,7 @@ router.post('/appointment', function (req, res) {
 });
 
 router.delete('/appointment', function (req, res) {
+  console.log(req.body.filter)
   var o_id = new ObjectId(JSON.parse(req.body.filter))
   deleteMongo("Appointment", {_id:o_id}).then(function (collection) {
     collection.delete(function (results) {
