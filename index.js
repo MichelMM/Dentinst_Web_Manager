@@ -2,7 +2,7 @@ console.log('------------------------------------');
 console.log("Iniciando");
 console.log('------------------------------------');
 //app
-if(!process.env.NODE_PROD){//Preguntar si estamos en produccion
+if (!process.env.NODE_PROD) {//Preguntar si estamos en produccion
   require('dotenv').config();
 }
 const express = require('express');
@@ -30,6 +30,7 @@ const handlebars = require('express-handlebars');
 //CORS
 const cors = require('cors');
 //Mongodb
+const ObjectId = require('mongodb').ObjectId;
 const {
   connectMongo,
   updateMongo,
@@ -76,9 +77,9 @@ app.get("/whats", jsonParser, (req, res) => {
   msg = "Tu cita será pronto"
   apiKey = process.env.WHATS_KEY
   phone = process.env.WHATS_PHONE
-  
+
   //Esta setInterval debería de estar fuera del endpoint(ejecutarse desde el inicio)
-  setInterval(function(){
+  setInterval(function () {
     console.log('------------------------------------');
     console.log("Revisando citas");
     // foreach de cada cita que tienen menos de un minuto de haber "expirado" sus 24hrs previas
@@ -101,17 +102,19 @@ const multerStorage = multerS3({
   acl: "public-read",
   key: function (req, file, cb) {
     const ext = file.originalname.split(".").pop()
-    cb(null,`dentistProfile/${file.fieldname}-${Date.now()}.${ext}`)
+    cb(null, `dentistProfile/${file.fieldname}-${Date.now()}.${ext}`)
   }
 })
 
-const upload = multer({ storage: multerStorage, fileFilter: function (req, file, cb) {
-  cb(null,file.mimetype.startsWith("image"))
-}})
+const upload = multer({
+  storage: multerStorage, fileFilter: function (req, file, cb) {
+    cb(null, file.mimetype.startsWith("image"))
+  }
+})
 
 
-app.post("/image", upload.single("image"),(req,res)=>{
-  res.send({location:req.file.location})
+app.post("/image", upload.single("image"), (req, res) => {
+  res.send({ location: req.file.location })
 })
 
 const server = app.listen(port, () => {
@@ -132,6 +135,55 @@ function sendWhats(msg, phone, apiKey) {
     console.log(err);
     console.log('------------------------------------');
   })
+}
+
+let date = ""
+let whatsTimer = setInterval(whatsTimerFunc, 3000);//Debería de ser de un dia entero (poco menos)
+
+function whatsTimerFunc() {
+  console.log('------------------------------------');
+  console.log("Entrando whatsTimerFunc");
+  console.log('------------------------------------');
+
+  date=""//SOLO PARA PRUEBAS Y DEMOSTRACIÓN, QUITAR EN OTRO CASO
+
+  let now = new Date().toISOString().slice(0, 10);
+  if (date !== now) {
+    //No se han mandado los mensajes del día de hoy
+    date = now
+    let filter = { Date: date }
+    connectMongo("Appointment", filter).then(function (collection) {
+      collection.find(function (results) {
+        results.forEach(cita => {
+          var o_id = new ObjectId(cita.Patient_ID)
+          connectMongo("Patient", { _id: o_id }).then(function (collection) {
+            collection.find(function (paciente) {
+              console.log('------------------------------------');
+              console.log("mandar");
+              console.log('------------------------------------');
+              // sendWhats(`${paciente[0].Name}, te recordamos que tu cita con el dentista es el día de mañana`,paciente[0].Phone_number,process.env.WHATS_KEY)
+            })
+          }).catch(function (err) {
+            console.log('------------------------------------');
+            console.log(`ERROR: ${err}`);
+            console.log('------------------------------------');
+          });
+        });
+      })
+    }).catch(function (err) {
+      console.log('------------------------------------');
+      console.log(`ERROR: ${err}`);
+      console.log('------------------------------------');
+    });
+  } else {
+    //Ya se mandaron los mensajes del día
+    //Reiniciar el temporizador en 10 minutos
+    console.log('------------------------------------');
+    console.log("Reiniciando whatsTimer en 10 minutos");
+    console.log('------------------------------------');
+    clearInterval(whatsTimer);
+    setTimeout(function () {whatsTimer = setInterval(whatsTimerFunc, 3000)}, 10000);
+  }
 }
 
 
@@ -158,5 +210,5 @@ Io.on('connection', socket => {
     console.log(`User ${data.patientName} ${data.patientLastName} made a new appointment with dentist ID: ${data.dentistId}`);
     socket.broadcast.emit('NewAppointment', data);
   });
-  
+
 });
