@@ -25,7 +25,8 @@ function getHashedPassword(pass) {
  * @swagger 
  * /api: 
  *     get: 
- *         description: api works 
+ *         summary: See if api works
+ *         description: API Documentation working 
  *         responses: 
  *             200: 
  *                 description: success call to the endpoint 
@@ -50,7 +51,7 @@ router.get('/dentists', function (req, res) {
    * @swagger 
    * /api/dentists: 
    *   get: 
-   *     description: Get all dentists from database
+   *     summary: Get all dentists from database
    *     responses: 
    *       200: 
    *         description: Worked! All dentists shown
@@ -72,6 +73,13 @@ router.get('/dentist', function (req, res) {
    * /api/dentist: 
    *   get: 
    *     summary: Get specific dentist with filter
+   *     parameters:
+   *       - in: query
+   *         name: filter
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    *     responses: 
    *       200: 
    *         description: Dentist found!
@@ -93,7 +101,15 @@ router.get('/dentistId', function (req, res) {
    * @swagger 
    * /api/dentistId: 
    *   get: 
-   *     description: Get specific dentist with ID
+   *     summary: Get specific dentist with ID
+   *     parameters:
+   *       - in: query
+   *         name: filter
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: string
+   *         example: "5fc7117881973b0017a0487a"
    *     responses: 
    *       200: 
    *         description: Dentist found!
@@ -244,7 +260,7 @@ router.get('/patients', function (req, res) {
    * @swagger 
    * /api/patients: 
    *   get: 
-   *     description: Get all patients from database
+   *     summary: Get all patients from database
    *     responses: 
    *       200: 
    *         description: Worked! All patients shown
@@ -266,6 +282,13 @@ router.get('/patient', function (req, res) {
    * /api/patient: 
    *   get: 
    *     summary: Get specific patient with filter
+   *     parameters:
+   *       - in: query
+   *         name: filter
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    *     responses: 
    *       200: 
    *         description: Patient found!
@@ -287,7 +310,15 @@ router.get('/patientId', function (req, res) {
    * @swagger 
    * /api/patientId: 
    *   get: 
-   *     description: Get specific patient with patient ID
+   *     summary: Get specific patient with patient ID
+   *     parameters:
+   *       - in: query
+   *         name: filter
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: string
+   *         example: "5fc003aa3aa92633c0d16f23"
    *     responses: 
    *       200: 
    *         description: Patient found!
@@ -440,7 +471,7 @@ router.get('/appointments', function (req, res) {
    * @swagger 
    * /api/appointments: 
    *   get: 
-   *     description: Get all appointments from database
+   *     summary: Get all appointments from database
    *     responses: 
    *       200: 
    *         description: Worked! All appointments shown
@@ -462,6 +493,13 @@ router.get('/appointment', function (req, res) {
    * /api/appointment: 
    *   get: 
    *     summary: Get specific appointment with filter
+   *     parameters:
+   *       - in: query
+   *         name: filter
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object 
    *     responses: 
    *       200: 
    *         description: Appointment found!
@@ -885,6 +923,14 @@ router.get('/token', function (req, res) {
    * /api/token: 
    *   get: 
    *     summary: Get token for user logged in
+   *     parameters:
+   *       - in: query
+   *         name: filter
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: string
+   *         example: cd88946955464ff040021c7f79b91d0f4ff19e243392d8558f3a493758db350384f8868d7eb0de863ddd645c2ca2d697 
    *     responses: 
    *       200: 
    *         description: Token found!
