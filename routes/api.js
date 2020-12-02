@@ -131,7 +131,7 @@ router.patch('/dentist', function (req, res) {
    * @swagger 
    * /api/dentist: 
    *   patch: 
-   *     summary: Update one or many "Dentist" documents
+   *     summary: Update one or many dentists on database
    *     requestBody:
    *       description: filter, data, [many]. If not filter, then filter={}
    *       required: true
@@ -194,7 +194,7 @@ router.post('/dentist', function (req, res) {
    *             properties:
    *               data:
    *                 type: object
-   *           example: {"data": {"Name":"Miguel","Last_name":"Mendez","Phone_number":"3324934501","Email":"miguel.r.m@mail.com","RFC":"123456","Schedule":{"Monday":["10-15"],"Tuesday":["8-16"],"Wednesday":["11-17"],"Thursday":["12-18"],"Friday":["8-16"],"Saturday":["10-15"],"Sunday":["8-13"]}}}
+   *           example: { "data": { "Name": "Miguel", "Last_name": "Mendez", "Phone_number": "3324934501", "Email": "miguel.r.m@mail.com", "Birth_date": "1994-01-01", "RFC": "MAMI940101AB1", "Password": "Cisco123", "Speciality": "Ortodoncia", "Social_media": "@ruvo99", "Description": "New dentist on this Swagger trial", "Image": "https://th.bing.com/th/id/OIP.taCNFCB7_CzTJ2RJAWZV2AHaHa?pid=Api&rs=1", "Schedule": { "Monday": [ "10:00:00", "10:30:00", "11:00:00" ], "Tuesday": [ "10:00:00", "10:30:00", "11:00:00" ], "Wednesday": [ "10:00:00", "10:30:00", "11:00:00" ], "Thursday": [ "10:00:00", "10:30:00", "11:00:00" ], "Friday": [ "10:00:00", "10:30:00", "11:00:00" ], "Saturday": [ "10:00:00", "10:30:00", "11:00:00" ] } } }
    *     responses: 
    *       200: 
    *         description: Dentist posted
@@ -232,7 +232,7 @@ router.delete('/dentist', function (req, res) {
    *             properties:
    *               filter:
    *                 type: object
-   *           example: {"filter": {"Name":"Michel"}}
+   *           example: { "filter": { "Name": "Miguel" } }
    *     responses: 
    *       200: 
    *         description: Document deleted 
@@ -342,7 +342,7 @@ router.patch('/patient', function (req, res) {
    * @swagger 
    * /api/patient: 
    *   patch: 
-   *     summary: Update one or many "Patient" documents
+   *     summary: Update one or many patients on database
    *     requestBody:
    *       description: filter, data, [many]. If not filter, then filter={}
    *       required: true
@@ -393,7 +393,7 @@ router.post('/patient', function (req, res) {
    * @swagger 
    * /api/patient: 
    *   post: 
-   *     summary: Create one "Patient" document
+   *     summary: Create a patient on database (Google tryout, no password included on data)
    *     requestBody:
    *       description: data
    *       required: true
@@ -404,7 +404,7 @@ router.post('/patient', function (req, res) {
    *             properties:
    *               data:
    *                 type: object
-   *           example: {"data":{"Patient_ID":1,"Name":"Antonio","Last_name":"Banderas","Phone_number":"3322764501","Email":"antonio.b@mail.com","Birth_date":{"date":660636000000},"RFC":"654321"}}
+   *           example: { "data": { "Name": "Antonio", "Last_name": "Banderas", "Phone_number": "3322764501", "Email": "antonio.b@gmail.com", "Birth_date": "1998-01-01", "RFC": "BAAN980101RF1" } }
    *     responses: 
    *       200: 
    *         description: Documents posted
@@ -431,7 +431,7 @@ router.delete('/patient', function (req, res) {
    * @swagger 
    * /api/patient: 
    *   delete: 
-   *     summary: Delete one "Patient" document
+   *     summary: Delete a patient from database
    *     requestBody:
    *       description: filter, has to be the main ID of the object
    *       required: true
@@ -442,7 +442,7 @@ router.delete('/patient', function (req, res) {
    *             properties:
    *               filter:
    *                 type: object
-   *           example: {"filter": {"Patient_ID":1}}
+   *           example: { "filter": { "Email": "antonio.b@gmail.com" } }
    *     responses: 
    *       200: 
    *         description: Document deleted 
@@ -521,7 +521,7 @@ router.patch('/appointment', function (req, res) {
    * @swagger 
    * /api/appointment: 
    *   patch: 
-   *     summary: Update one or many "Appointment" documents
+   *     summary: Update one or many appointments on database
    *     requestBody:
    *       description: filter, data, [many]. If not filter, then filter={}
    *       required: true
@@ -573,7 +573,7 @@ router.post('/appointment', function (req, res) {
    * @swagger 
    * /api/appointment: 
    *   post: 
-   *     summary: Create one "Appointment" document
+   *     summary: Create one appointment on database
    *     requestBody:
    *       description: data
    *       required: true
@@ -584,7 +584,7 @@ router.post('/appointment', function (req, res) {
    *             properties:
    *               data:
    *                 type: object
-   *           example: {"data":{"Appointment_ID":1,"Dentist_ID":100,"Patient_ID":1,"Cause":"Dolor de muelas","Description":"Llega usuario con cara inflamada","images":[""],"Date":{"date":1603865460000}}}
+   *           example: { "data": { "Dentist_ID": "5fc7117881973b0017a0487a", "Patient_ID": "5fb81a9d81963d4e482c1e5c", "Cause": "Prueba desde Swagger", "Date": "2020-12-24", "Hour": "10:30:00", "Paid": false, "Images": [], "Description": "Prueba para swagger, haciendo Post en appointment", "Payment_type": "Efectivo", "Amount": 200 } }
    *     responses: 
    *       200: 
    *         description: Documents posted
@@ -612,18 +612,14 @@ router.delete('/appointment', function (req, res) {
    * @swagger 
    * /api/appointment: 
    *   delete: 
-   *     summary: Delete one "Appointment" document
-   *     requestBody:
-   *       description: filter, has to be the main ID of the object
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             properties:
-   *               filter:
-   *                 type: object
-   *           example: {"filter": {"Appointment_ID":1}}
+   *     summary: Delete one appointment on database
+   *     parameters:
+   *       - in: query
+   *         name: filter
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: string 
    *     responses: 
    *       200: 
    *         description: Document deleted 
