@@ -620,6 +620,7 @@ router.delete('/appointment', function (req, res) {
    *           application/json:
    *             schema:
    *               type: string 
+   *         example: 5fc80360b7c253339cdfd444
    *     responses: 
    *       200: 
    *         description: Document deleted 
