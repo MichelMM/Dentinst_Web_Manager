@@ -46,6 +46,17 @@ router.get('/dentists', function (req, res) {
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
+  /**
+   * @swagger 
+   * /api/dentists: 
+   *   get: 
+   *     description: Get all dentists from database
+   *     responses: 
+   *       200: 
+   *         description: Worked! All dentists shown
+   *       400:
+   *         description: Couldn't bring all dentists
+   */
 });
 
 router.get('/dentist', function (req, res) {
@@ -56,17 +67,39 @@ router.get('/dentist', function (req, res) {
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
+  /**
+   * @swagger 
+   * /api/dentist: 
+   *   get: 
+   *     summary: Get specific dentist with filter
+   *     responses: 
+   *       200: 
+   *         description: Dentist found!
+   *       400:
+   *         description: Dentist not found
+   */
 });
 
 router.get('/dentistId', function (req, res) {
   var o_id = new ObjectId(JSON.parse(req.query.filter))
-  connectMongo("Dentist", {_id:o_id}).then(function (collection) {
+  connectMongo("Dentist", { _id: o_id }).then(function (collection) {
     collection.find(function (results) {
       res.send(results);
     })
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
+  /**
+   * @swagger 
+   * /api/dentistId: 
+   *   get: 
+   *     description: Get specific dentist with ID
+   *     responses: 
+   *       200: 
+   *         description: Dentist found!
+   *       400:
+   *         description: Dentist not found
+   */
 });
 
 router.patch('/dentist', function (req, res) {
@@ -121,7 +154,7 @@ router.patch('/dentist', function (req, res) {
 });
 
 router.post('/dentist', function (req, res) {
-  console.log("EndPoints:",req.body.data)
+  console.log("EndPoints:", req.body.data)
   postMongo("Dentist", req.body.data).then(function (collection) {
     collection.post(function (results) {
       res.send(results);
@@ -131,10 +164,10 @@ router.post('/dentist', function (req, res) {
   });
 
   /**
-   * @swagger 
+   * @swagger
    * /api/dentist: 
    *   post: 
-   *     summary: Create one "Dentist" document
+   *     summary: Create a dentist on database
    *     requestBody:
    *       description: data
    *       required: true
@@ -145,12 +178,12 @@ router.post('/dentist', function (req, res) {
    *             properties:
    *               data:
    *                 type: object
-   *           example: {"data": {"Dentist_ID":1,"Name":"Miguel Robertooo","Last_name":"Mendez","Phone_number":"3324934501","Email":"miguel.r.m@mail.com","RFC":"123456","Schedule":{"Monday":["10-15"],"Tuesday":["8-16"],"Wednesday":["11-17"],"Thursday":["12-18"],"Friday":["8-16"],"Saturday":["10-15"],"Sunday":["8-13"]}}}
+   *           example: {"data": {"Name":"Miguel","Last_name":"Mendez","Phone_number":"3324934501","Email":"miguel.r.m@mail.com","RFC":"123456","Schedule":{"Monday":["10-15"],"Tuesday":["8-16"],"Wednesday":["11-17"],"Thursday":["12-18"],"Friday":["8-16"],"Saturday":["10-15"],"Sunday":["8-13"]}}}
    *     responses: 
    *       200: 
-   *         description: Documents posted
+   *         description: Dentist posted
    *       400:
-   *         description: Update error
+   *         description: Post error
    *         content:
    *           text/plain:
    *             schema:
@@ -172,7 +205,7 @@ router.delete('/dentist', function (req, res) {
    * @swagger 
    * /api/dentist: 
    *   delete: 
-   *     summary: Delete one "Dentist" document
+   *     summary: Delete dentist from database
    *     requestBody:
    *       description: filter, has to be the main ID of the object
    *       required: true
@@ -183,7 +216,7 @@ router.delete('/dentist', function (req, res) {
    *             properties:
    *               filter:
    *                 type: object
-   *           example: {"filter": {"Dentist_ID":1}}
+   *           example: {"filter": {"Name":"Michel"}}
    *     responses: 
    *       200: 
    *         description: Document deleted 
@@ -207,6 +240,17 @@ router.get('/patients', function (req, res) {
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
+  /**
+   * @swagger 
+   * /api/patients: 
+   *   get: 
+   *     description: Get all patients from database
+   *     responses: 
+   *       200: 
+   *         description: Worked! All patients shown
+   *       400:
+   *         description: Couldn't bring all patients
+   */
 });
 
 router.get('/patient', function (req, res) {
@@ -217,21 +261,43 @@ router.get('/patient', function (req, res) {
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
+  /**
+   * @swagger 
+   * /api/patient: 
+   *   get: 
+   *     summary: Get specific patient with filter
+   *     responses: 
+   *       200: 
+   *         description: Patient found!
+   *       400:
+   *         description: Patient not found
+   */
 });
 
 router.get('/patientId', function (req, res) {
   var o_id = new ObjectId(JSON.parse(req.query.filter))
-  connectMongo("Patient", {_id:o_id}).then(function (collection) {
+  connectMongo("Patient", { _id: o_id }).then(function (collection) {
     collection.find(function (results) {
       res.send(results);
     })
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
+  /**
+   * @swagger 
+   * /api/patientId: 
+   *   get: 
+   *     description: Get specific patient with patient ID
+   *     responses: 
+   *       200: 
+   *         description: Patient found!
+   *       400:
+   *         description: Patient not found
+   */
 });
 
 router.patch('/patient', function (req, res) {
-  if(req.body.Password){
+  if (req.body.Password) {
     req.body.Password = getHashedPassword(req.body.Password);
   }
   updateMongo("Patient", req.body.filter, req.body.data, req.body.many).then(function (collection) {
@@ -359,156 +425,6 @@ router.delete('/patient', function (req, res) {
    */
 });
 
-//////////////////////INVOICES//////////////////////
-
-router.get('/invoices', function (req, res) {
-
-  connectMongo("Invoice").then(function (collection) {
-    collection.find(function (results) {
-      res.send(results);
-    })
-  }).catch(function (err) {
-    res.status(400).send(`ERROR: ${err}`);
-  });
-});
-
-router.get('/invoice', function (req, res) {
-
-  connectMongo("Invoice", JSON.parse(req.query.filter)).then(function (collection) {
-    collection.find(function (results) {
-      res.send(results);
-    })
-  }).catch(function (err) {
-    res.status(400).send(`ERROR: ${err}`);
-  });
-});
-
-router.patch('/invoice', function (req, res) {
-  updateMongo("Invoice", req.body.filter, req.body.data, req.body.many).then(function (collection) {
-    collection.update(function (results) {
-      res.send(results);
-    })
-  }).catch(function (err) {
-    res.status(400).send(`ERROR: ${err}`);
-  });
-  /**
-   * @swagger 
-   * /api/invoice: 
-   *   patch: 
-   *     summary: Update one or many "Invoice" documents
-   *     requestBody:
-   *       description: filter, data, [many]. If not filter, then filter={}
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             properties:
-   *               filter:
-   *                 type: object
-   *               data:
-   *                 type: object
-   *               many:
-   *                 type: boolean
-   *           example: {"data":{"$set":{"Invoice_ID":10}}}
-   *     responses: 
-   *       200: 
-   *         description: Documents updated
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 matchedCount:
-   *                   type: number
-   *                 modifiedCount:
-   *                   type: number
-   *       400:
-   *         description: Update error
-   *         content:
-   *           text/plain:
-   *             schema:
-   *               type: string
-   *               example: Error [*err*]
-   */
-});
-
-router.post('/invoice', function (req, res) {
-  postMongo("Invoice", req.body.data).then(function (collection) {
-    collection.post(function (results) {
-      res.send(results);
-    })
-  }).catch(function (err) {
-    res.status(400).send(`ERROR: ${err}`);
-  });
-
-  /**
-   * @swagger 
-   * /api/invoice: 
-   *   post: 
-   *     summary: Create one "invoice" document
-   *     requestBody:
-   *       description: data
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             properties:
-   *               data:
-   *                 type: object
-   *           example: {"data":{"Invoice_ID":1,"Appointment_ID":1,"items":[{"Code":"1","Description":"Limpieza","Cost":1000"}],"Payment_type":"Efectivo","Amount":1000}}
-   *     responses: 
-   *       200: 
-   *         description: Documents posted
-   *       400:
-   *         description: Update error
-   *         content:
-   *           text/plain:
-   *             schema:
-   *               type: string
-   *               example: Error [*err*]
-   */
-
-});
-
-router.delete('/invoice', function (req, res) {
-  deleteMongo("Invoice", req.body.filter).then(function (collection) {
-    collection.delete(function (results) {
-      res.send(results);
-    })
-  }).catch(function (err) {
-    res.status(400).send(`ERROR: ${err}`);
-  });
-  /**
-   * @swagger 
-   * /api/invoice: 
-   *   delete: 
-   *     summary: Delete one "Invoice" document
-   *     requestBody:
-   *       description: filter, has to be the main ID of the object
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             properties:
-   *               filter:
-   *                 type: object
-   *           example: {"filter": {"Invoice_ID":1}}
-   *     responses: 
-   *       200: 
-   *         description: Document deleted 
-   *       400:
-   *         description: Delete error
-   *         content:
-   *           text/plain:
-   *             schema:
-   *               type: string
-   *               example: Error [*err*]
-   */
-});
-
 //////////////////////APPOINTMENTS//////////////////////
 
 router.get('/appointments', function (req, res) {
@@ -520,6 +436,17 @@ router.get('/appointments', function (req, res) {
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
+  /**
+   * @swagger 
+   * /api/appointments: 
+   *   get: 
+   *     description: Get all appointments from database
+   *     responses: 
+   *       200: 
+   *         description: Worked! All appointments shown
+   *       400:
+   *         description: Couldn't bring all appointments
+   */
 });
 
 router.get('/appointment', function (req, res) {
@@ -530,11 +457,22 @@ router.get('/appointment', function (req, res) {
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
+  /**
+   * @swagger 
+   * /api/appointment: 
+   *   get: 
+   *     summary: Get specific appointment with filter
+   *     responses: 
+   *       200: 
+   *         description: Appointment found!
+   *       400:
+   *         description: Appointment not found
+   */
 });
 
 router.patch('/appointment', function (req, res) {
   var o_id = new ObjectId(req.body.filter)
-  updateMongo("Appointment", {_id:o_id}, req.body.data, req.body.many).then(function (collection) {
+  updateMongo("Appointment", { _id: o_id }, req.body.data, req.body.many).then(function (collection) {
     collection.update(function (results) {
       res.send(results);
     })
@@ -685,7 +623,7 @@ router.post('/auth/google', function (req, res) {
           }).then(() => {
             // PatientController.createToken(response._id, res);
 
-            tokenStuff = Token.create(response._id,0)
+            tokenStuff = Token.create(response._id, 0)
             tokenStuff[0].then(tokenResult => {
               // console.log('Created token: ', tokenResult);
               res.send(tokenStuff[1]);
@@ -700,7 +638,7 @@ router.post('/auth/google', function (req, res) {
         } else {
           console.log('Already has google ID');
           // PatientController.createToken(response._id, res);
-          tokenStuff = Token.create(response._id,0)
+          tokenStuff = Token.create(response._id, 0)
           tokenStuff[0].then(tokenResult => {
             // console.log('Created token: ', tokenResult);
             res.send(tokenStuff[1]);
@@ -718,7 +656,7 @@ router.post('/auth/google', function (req, res) {
           Name: req.body.firstName,
           Email: email,
           googleId: req.body.id,
-          Last_name:req.body.lastName
+          Last_name: req.body.lastName
         }, {
           timestamps: false
         }).then(response => {
@@ -729,7 +667,7 @@ router.post('/auth/google', function (req, res) {
             console.log('----------------USR CREADO----------------');
             console.log(response);
             console.log('------------------------------------');
-            tokenStuff = Token.create(response._id,0)
+            tokenStuff = Token.create(response._id, 0)
             tokenStuff[0].then(tokenResult => {
               res.send(tokenStuff[1]);
             }).catch(err => {
@@ -746,6 +684,17 @@ router.post('/auth/google', function (req, res) {
   }).catch(err => {
     res.status(400).send();
   })
+  /**
+   * @swagger 
+   * /api/auth/google: 
+   *   post: 
+   *     summary: Authentication with google account
+   *     responses: 
+   *       200: 
+   *         description: Authenticated with Goolo Goolo!
+   *       400:
+   *         description: Not authenticated with Goolo Goolo
+   */
 });
 
 router.post('/auth', function (req, res) {
@@ -770,7 +719,7 @@ router.post('/auth', function (req, res) {
       console.log('------------------------------------');
       if (bcrypt.compareSync(req.body.data.Password, results[0].Password)) {
         //La contraseña coincide
-        tokenStuff = Token.create(results[0]._id,0)
+        tokenStuff = Token.create(results[0]._id, 0)
         tokenStuff[0].then(tokenResult => {
           // console.log('Created token: ', tokenResult);
           res.send(tokenStuff[1]);
@@ -789,7 +738,17 @@ router.post('/auth', function (req, res) {
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
-
+  /**
+   * @swagger 
+   * /api/auth: 
+   *   post: 
+   *     summary: Authentication with regular patient account
+   *     responses: 
+   *       200: 
+   *         description: Patient authenticated!
+   *       400:
+   *         description: Patient not authenticated
+   */
 });
 
 
@@ -815,7 +774,7 @@ router.post('/dentistAuth', function (req, res) {
       console.log('------------------------------------');
       if (bcrypt.compareSync(req.body.data.Password, results[0].Password)) {
         //La contraseña coincide
-        tokenStuff = Token.create(results[0]._id,1)
+        tokenStuff = Token.create(results[0]._id, 1)
         tokenStuff[0].then(tokenResult => {
           // console.log('Created token: ', tokenResult);
           res.send(tokenStuff[1]);
@@ -831,7 +790,17 @@ router.post('/dentistAuth', function (req, res) {
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
-
+  /**
+   * @swagger 
+   * /api/dentistAuth: 
+   *   post: 
+   *     summary: Authentication with regular dentist account
+   *     responses: 
+   *       200: 
+   *         description: Dentist authenticated!
+   *       400:
+   *         description: Dentist not authenticated
+   */
 });
 
 
@@ -853,6 +822,17 @@ router.post('/signup', function (req, res) {
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
+  /**
+   * @swagger 
+   * /api/signup: 
+   *   post: 
+   *     summary: Sign up with regular patient account
+   *     responses: 
+   *       200: 
+   *         description: Patient registered!
+   *       400:
+   *         description: Patient not registered
+   */
 });
 
 
@@ -870,7 +850,7 @@ router.post('/dentistSignup', function (req, res) {
     Social_media: req.body.data.Social_media,
     Description: req.body.data.Description,
     Image: req.body.data.Image,
-    Schedule:req.body.data.Schedule
+    Schedule: req.body.data.Schedule
   }
   postMongo("Dentist", obj).then(function (collection) {
     collection.post(function (results) {
@@ -879,16 +859,38 @@ router.post('/dentistSignup', function (req, res) {
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
+  /**
+   * @swagger 
+   * /api/dentistSignup: 
+   *   post: 
+   *     summary: Sign up with regular dentist account
+   *     responses: 
+   *       200: 
+   *         description: Dentist registered!
+   *       400:
+   *         description: Dentist not registered
+   */
 });
 
 router.get('/token', function (req, res) {
-  connectMongo("Token", {token:req.query.filter}).then(function (collection) {
+  connectMongo("Token", { token: req.query.filter }).then(function (collection) {
     collection.find(function (results) {
       res.send(results);
     })
   }).catch(function (err) {
     res.status(400).send(`ERROR: ${err}`);
   });
+  /**
+   * @swagger 
+   * /api/token: 
+   *   get: 
+   *     summary: Get token for user logged in
+   *     responses: 
+   *       200: 
+   *         description: Token found!
+   *       400:
+   *         description: Token not found
+   */
 });
 
 module.exports = router;
