@@ -137,8 +137,21 @@ function sendWhats(msg, phone, apiKey) {
   })
 }
 
+function sendSMS(msg, phone) {
+  msg_encoded = encodeUrl(msg)
+  axios.post(`https://http-api.d7networks.com/send?username=${process.env.SMS_USR}&password=${process.env.SMS_PASS}&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=${msg}&to=${phone}`).then(response => {
+    console.log('----------------SMS-----------------');
+    console.log(`${response.status}: ${response.data}`);
+    console.log('------------------------------------');
+  }).catch(err => {
+    console.log('----------------SMS-----------------');
+    console.log(err);
+    console.log('------------------------------------');
+  })
+}
+
 let date = ""
-let whatsTimer = setInterval(whatsTimerFunc, 3000);//Debería de ser de un dia entero (poco menos)
+let whatsTimer = setInterval(whatsTimerFunc, 1*60*1000);//Debería de ser de un dia entero (poco menos)
 
 function whatsTimerFunc() {
   console.log('------------------------------------');
@@ -162,6 +175,7 @@ function whatsTimerFunc() {
               console.log("mandar");
               console.log('------------------------------------');
               // sendWhats(`${paciente[0].Name}, te recordamos que tu cita con el dentista es el día de mañana`,paciente[0].Phone_number,process.env.WHATS_KEY)
+              // sendSMS(`Hola, te recordamos que tu cita con el dentista es en un dia`,paciente[0].Phone_number)
             })
           }).catch(function (err) {
             console.log('------------------------------------');
@@ -182,7 +196,7 @@ function whatsTimerFunc() {
     console.log("Reiniciando whatsTimer en 10 minutos");
     console.log('------------------------------------');
     clearInterval(whatsTimer);
-    setTimeout(function () {whatsTimer = setInterval(whatsTimerFunc, 3000)}, 10000);
+    setTimeout(function () {whatsTimer = setInterval(whatsTimerFunc, 1*60*1000)}, 10*60*1000);
   }
 }
 
