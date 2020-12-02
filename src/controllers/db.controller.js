@@ -75,6 +75,7 @@ function updateMongo(collectionName, filter, data, many) {
 }
 
 function postMongo(collectionName, data) {
+    console.log("Controllers:",data)
     return new Promise(function (resolve, reject) {
         MongoClient.connect(url, {
             useUnifiedTopology: true

@@ -121,6 +121,7 @@ router.patch('/dentist', function (req, res) {
 });
 
 router.post('/dentist', function (req, res) {
+  console.log("EndPoints:",req.body.data)
   postMongo("Dentist", req.body.data).then(function (collection) {
     collection.post(function (results) {
       res.send(results);
