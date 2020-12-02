@@ -869,7 +869,8 @@ router.post('/dentistSignup', function (req, res) {
     Specialty: req.body.data.Specialty,
     Social_media: req.body.data.Social_media,
     Description: req.body.data.Description,
-    Image: req.body.data.Image
+    Image: req.body.data.Image,
+    Schedule:req.body.data.Schedule
   }
   postMongo("Dentist", obj).then(function (collection) {
     collection.post(function (results) {
