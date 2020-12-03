@@ -473,7 +473,7 @@ router.delete('/patient', hasToken, function (req, res) {
 
 //////////////////////APPOINTMENTS//////////////////////
 
-router.get('/appointments', function (req, res) {
+router.get('/appointments', hasToken, function (req, res) {
 
   connectMongo("Appointment").then(function (collection) {
     collection.find(function (results) {
@@ -495,7 +495,7 @@ router.get('/appointments', function (req, res) {
    */
 });
 
-router.get('/appointment', function (req, res) {
+router.get('/appointment', hasToken, function (req, res) {
   connectMongo("Appointment", JSON.parse(req.query.filter)).then(function (collection) {
     collection.find(function (results) {
       res.send(results);
