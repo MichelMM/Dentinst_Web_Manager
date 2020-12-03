@@ -1,0 +1,216 @@
+{
+	"info": {
+		"_postman_id": "ddd4cfbf-5003-46e9-960c-c2e56094823d",
+		"name": "DentistWebManagerPostman",
+		"description": "Testing for project's API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post register dentist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b2ac3441-b02b-414b-b358-9bc158247f62",
+						"exec": [
+							"var jsonData = pm.response.json()\r",
+							"\r",
+							"pm.test(\"notEmpty\", function() {\r",
+							"    pm.expect(jsonData)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"correctStatus\", function() {\r",
+							"    pm.response.to.have.status(200)\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"data\": {\r\n    \"Name\": \"Miguel\",\r\n    \"Last_name\": \"Mendez\",\r\n    \"Phone_number\": \"3324934501\",\r\n    \"Email\": \"mmendezzz@gmail.com\",\r\n    \"Birth_date\": \"1994-01-01\",\r\n    \"RFC\": \"MAMI940101AB1\",\r\n    \"Password\": \"Cisco123\",\r\n    \"Speciality\": \"Ortodoncia\",\r\n    \"Social_media\": \"@ruvo99\",\r\n    \"Description\": \"New dentist on this Swagger trial\",\r\n    \"Image\": \"https://th.bing.com/th/id/OIP.taCNFCB7_CzTJ2RJAWZV2AHaHa?pid=Api&rs=1\",\r\n    \"Schedule\": {\r\n      \"Monday\": [\r\n        \"10:00:00\",\r\n        \"10:30:00\",\r\n        \"11:00:00\"\r\n      ],\r\n      \"Tuesday\": [\r\n        \"10:00:00\",\r\n        \"10:30:00\",\r\n        \"11:00:00\"\r\n      ],\r\n      \"Wednesday\": [\r\n        \"10:00:00\",\r\n        \"10:30:00\",\r\n        \"11:00:00\"\r\n      ],\r\n      \"Thursday\": [\r\n        \"10:00:00\",\r\n        \"10:30:00\",\r\n        \"11:00:00\"\r\n      ],\r\n      \"Friday\": [\r\n        \"10:00:00\",\r\n        \"10:30:00\",\r\n        \"11:00:00\"\r\n      ],\r\n      \"Saturday\": [\r\n        \"10:00:00\",\r\n        \"10:30:00\",\r\n        \"11:00:00\"\r\n      ]\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}api/dentistSignup",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"dentistSignup"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete appointment by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7b5e7c47-8eee-4600-b690-ee9f0acbf421",
+						"exec": [
+							"var jsonData = pm.response.json()\r",
+							"\r",
+							"pm.test(\"deletedMoreThan0\", function() {\r",
+							"    pm.expect(jsonData.deletedCount).to.be.greaterThan(0)\r",
+							"})\r",
+							"\r",
+							"\r",
+							"pm.test(\"correctStatus\", function() {\r",
+							"    pm.response.to.have.status(200)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}api/appointment?filter=\"{{appointmentId}}\"&token={{token}}",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"appointment"
+					],
+					"query": [
+						{
+							"key": "filter",
+							"value": "\"{{appointmentId}}\""
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch appointment by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2c1c9028-f870-40f3-97fd-0f25ed2c7011",
+						"exec": [
+							"var jsonData = pm.response.json()\r",
+							"\r",
+							"pm.test(\"patchedMoreThan0\", function() {\r",
+							"    pm.expect(jsonData.modifiedCount).to.be.greaterThan(0)\r",
+							"})\r",
+							"\r",
+							"\r",
+							"pm.test(\"correctStatus\", function() {\r",
+							"    pm.response.to.have.status(200)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"filter\": \"5fc71caf81973b0017a0487f\",\r\n  \"data\": {\r\n    \"$set\": {\r\n      \"Cause\": \"Postman updates with patch\"\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}api/appointment?token={{token}}",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"appointment"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch appointment by ID unauth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2a68ff2d-441b-48e6-bd0e-ccf7aa555a50",
+						"exec": [
+							"pm.test(\"incorrectStatus\", function() {\r",
+							"    pm.response.to.have.status(401)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"filter\": \"5fc71caf81973b0017a0487f\",\r\n  \"data\": {\r\n    \"$set\": {\r\n      \"Cause\": \"Postman updates with patch\"\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}api/appointment",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"appointment"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "5e0eba8482aa9ca484aea3a6e0f2629b6b0ba53721f6e1ea751fbf669d143eba950d7120028789189d44ecee6fb57ab9",
+				"type": "string"
+			}
+		]
+	},
+	"protocolProfileBehavior": {}
+}

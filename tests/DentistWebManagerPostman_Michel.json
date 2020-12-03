@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "ff785b10-c04f-46d5-b64e-ac96602348fe",
+		"name": "DentistWebManagerPostman",
+		"description": "Testing for project's API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Appointment with filter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a3c4fbea-2b06-4441-baea-57adbb05bfca",
+						"exec": [
+							"var jsonData = pm.response.json()\r",
+							"\r",
+							"pm.test(\"notEmpty\", function() {\r",
+							"    pm.expect(jsonData.length).to.be.greaterThan(0)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"correctStatus\", function() {\r",
+							"    pm.response.to.have.status(200)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}api/appointment?token={{token}}&filter={\"Date\":\"2020-12-04\", \"Paid\":false}",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"appointment"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "{{token}}"
+						},
+						{
+							"key": "filter",
+							"value": "{\"Date\":\"2020-12-04\", \"Paid\":false}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Appointment with filter unauth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "856bd9cf-4f8f-4aec-9d0c-a608d97325fd",
+						"exec": [
+							"pm.test(\"correctStatus\", function() {\r",
+							"    pm.response.to.have.status(401)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}api/appointment?filter={\"Date\":\"2020-12-04\", \"Paid\":false}",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"appointment"
+					],
+					"query": [
+						{
+							"key": "filter",
+							"value": "{\"Date\":\"2020-12-04\", \"Paid\":false}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post appointment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8f7cd92a-6ec8-45cb-bf25-ededefebec15",
+						"exec": [
+							"var jsonData = pm.response.json()\r",
+							"pm.environment.set(\"appointmentId\",jsonData.insertedId)\r",
+							"\r",
+							"pm.test(\"insertedMoreThan0\", function() {\r",
+							"    pm.expect(jsonData.insertedCount).to.be.greaterThan(0)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"correctStatus\", function() {\r",
+							"    pm.response.to.have.status(200)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\": {\r\n        \"Dentist_ID\": \"5fc7117881973b0017a0487a\",\r\n        \"Patient_ID\": \"5fb81a9d81963d4e482c1e5c\",\r\n        \"Cause\": \"Prueba desde Swagger\",\r\n        \"Date\": \"2020-12-24\",\r\n        \"Hour\": \"10:30:00\",\r\n        \"Paid\": false,\r\n        \"Images\": [],\r\n        \"Description\": \"Prueba, haciendo Post en appointment desde Postman\",\r\n        \"Payment_type\": \"Efectivo\",\r\n        \"Amount\": 200\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}api/appointment?token={{token}}",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"appointment"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post appointment unauth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fc77640c-bf69-4633-b5f3-2d94ae645fc8",
+						"exec": [
+							"pm.test(\"correctStatus\", function() {\r",
+							"    pm.response.to.have.status(401)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\": {\r\n        \"Dentist_ID\": \"5fc7117881973b0017a0487a\",\r\n        \"Patient_ID\": \"5fb81a9d81963d4e482c1e5c\",\r\n        \"Cause\": \"Prueba desde Swagger\",\r\n        \"Date\": \"2020-12-24\",\r\n        \"Hour\": \"10:30:00\",\r\n        \"Paid\": false,\r\n        \"Images\": [],\r\n        \"Description\": \"Prueba, haciendo Post en appointment desde Postman\",\r\n        \"Payment_type\": \"Efectivo\",\r\n        \"Amount\": 200\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}api/appointment",
+					"host": [
+						"{{host}}api"
+					],
+					"path": [
+						"appointment"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "5e0eba8482aa9ca484aea3a6e0f2629b6b0ba53721f6e1ea751fbf669d143eba950d7120028789189d44ecee6fb57ab9",
+				"type": "string"
+			}
+		]
+	},
+	"protocolProfileBehavior": {}
+}
