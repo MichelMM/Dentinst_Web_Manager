@@ -175,7 +175,7 @@ function whatsTimerFunc() {
               console.log("mandar");
               console.log('------------------------------------');
               // sendWhats(`${paciente[0].Name}, te recordamos que tu cita con el dentista es el día de mañana`,paciente[0].Phone_number,process.env.WHATS_KEY)
-              // sendSMS(`Hola, te recordamos que tu cita con el dentista es en un dia`,paciente[0].Phone_number)
+              sendSMS(`Hola, te recordamos que tu cita con el dentista es en un dia`,paciente[0].Phone_number)
             })
           }).catch(function (err) {
             console.log('------------------------------------');
