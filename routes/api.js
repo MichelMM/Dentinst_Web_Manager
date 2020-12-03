@@ -939,6 +939,17 @@ router.post('/dentistSignup', function (req, res) {
    * /api/dentistSignup: 
    *   post: 
    *     summary: Sign up with regular dentist account
+   *     requestBody:
+   *       description: data
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               data:
+   *                 type: object
+   *           example: { "data": { "Name": "Miguel", "Last_name": "Mendez", "Phone_number": "3324934501", "Email": "miguel.r.m@mail.com", "Birth_date": "1994-01-01", "RFC": "MAMI940101AB1", "Password": "Cisco123", "Speciality": "Ortodoncia", "Social_media": "@ruvo99", "Description": "New dentist on this Swagger trial", "Image": "https://th.bing.com/th/id/OIP.taCNFCB7_CzTJ2RJAWZV2AHaHa?pid=Api&rs=1", "Schedule": { "Monday": [ "10:00:00", "10:30:00", "11:00:00" ], "Tuesday": [ "10:00:00", "10:30:00", "11:00:00" ], "Wednesday": [ "10:00:00", "10:30:00", "11:00:00" ], "Thursday": [ "10:00:00", "10:30:00", "11:00:00" ], "Friday": [ "10:00:00", "10:30:00", "11:00:00" ], "Saturday": [ "10:00:00", "10:30:00", "11:00:00" ] } } }
    *     responses: 
    *       200: 
    *         description: Dentist registered!
