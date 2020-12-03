@@ -20,6 +20,21 @@ function getHashedPassword(pass) {
   return bcrypt.hashSync(pass, 12)
 }
 
+function hasToken(req, res, next) {
+  let token = req.query.token || ""
+  Token.findByToken(token).then(respuesta => {
+    if (respuesta !== null) {
+      //Token valido
+      next()
+    } else {
+      res.status(401).send("Falta token")
+    }
+  }).catch(err => {
+    console.log('----------------ERROR--------------------');
+    console.log(err);
+    console.log('------------------------------------');
+  })
+}
 
 /** 
  * @swagger 
@@ -118,7 +133,7 @@ router.get('/dentistId', function (req, res) {
    */
 });
 
-router.patch('/dentist', function (req, res) {
+router.patch('/dentist', hasToken, function (req, res) {
   updateMongo("Dentist", req.body.filter, req.body.data, req.body.many).then(function (collection) {
     collection.update(function (results) {
       res.send(results);
@@ -169,7 +184,7 @@ router.patch('/dentist', function (req, res) {
    */
 });
 
-router.post('/dentist', function (req, res) {
+router.post('/dentist', hasToken, function (req, res) {
   console.log("EndPoints:", req.body.data)
   postMongo("Dentist", req.body.data).then(function (collection) {
     collection.post(function (results) {
@@ -209,7 +224,7 @@ router.post('/dentist', function (req, res) {
 
 });
 
-router.delete('/dentist', function (req, res) {
+router.delete('/dentist', hasToken, function (req, res) {
   deleteMongo("Dentist", req.body.filter).then(function (collection) {
     collection.delete(function (results) {
       res.send(results);
@@ -248,7 +263,7 @@ router.delete('/dentist', function (req, res) {
 
 //////////////////////PATIENTS//////////////////////
 
-router.get('/patients', function (req, res) {
+router.get('/patients', hasToken, function (req, res) {
   connectMongo("Patient").then(function (collection) {
     collection.find(function (results) {
       res.send(results);
@@ -269,7 +284,7 @@ router.get('/patients', function (req, res) {
    */
 });
 
-router.get('/patient', function (req, res) {
+router.get('/patient', hasToken, function (req, res) {
   connectMongo("Patient", JSON.parse(req.query.filter)).then(function (collection) {
     collection.find(function (results) {
       res.send(results);
@@ -297,7 +312,7 @@ router.get('/patient', function (req, res) {
    */
 });
 
-router.get('/patientId', function (req, res) {
+router.get('/patientId', hasToken, function (req, res) {
   var o_id = new ObjectId(JSON.parse(req.query.filter))
   connectMongo("Patient", { _id: o_id }).then(function (collection) {
     collection.find(function (results) {
@@ -327,7 +342,7 @@ router.get('/patientId', function (req, res) {
    */
 });
 
-router.patch('/patient', function (req, res) {
+router.patch('/patient', hasToken, function (req, res) {
   if (req.body.Password) {
     req.body.Password = getHashedPassword(req.body.Password);
   }
@@ -380,7 +395,7 @@ router.patch('/patient', function (req, res) {
    */
 });
 
-router.post('/patient', function (req, res) {
+router.post('/patient', hasToken, function (req, res) {
   postMongo("Patient", req.body.data).then(function (collection) {
     collection.post(function (results) {
       res.send(results);
@@ -419,7 +434,7 @@ router.post('/patient', function (req, res) {
 
 });
 
-router.delete('/patient', function (req, res) {
+router.delete('/patient', hasToken, function (req, res) {
   deleteMongo("Patient", req.body.filter).then(function (collection) {
     collection.delete(function (results) {
       res.send(results);
@@ -508,7 +523,7 @@ router.get('/appointment', function (req, res) {
    */
 });
 
-router.patch('/appointment', function (req, res) {
+router.patch('/appointment', hasToken, function (req, res) {
   var o_id = new ObjectId(req.body.filter)
   updateMongo("Appointment", { _id: o_id }, req.body.data, req.body.many).then(function (collection) {
     collection.update(function (results) {
@@ -559,7 +574,7 @@ router.patch('/appointment', function (req, res) {
    */
 });
 
-router.post('/appointment', function (req, res) {
+router.post('/appointment', hasToken, function (req, res) {
 
   postMongo("Appointment", req.body.data).then(function (collection) {
     collection.post(function (results) {
@@ -599,10 +614,10 @@ router.post('/appointment', function (req, res) {
 
 });
 
-router.delete('/appointment', function (req, res) {
+router.delete('/appointment', hasToken, function (req, res) {
   console.log(req.query.filter)
   var o_id = new ObjectId(JSON.parse(req.query.filter))
-  deleteMongo("Appointment", {_id:o_id}).then(function (collection) {
+  deleteMongo("Appointment", { _id: o_id }).then(function (collection) {
     collection.delete(function (results) {
       res.send(results);
     })
