@@ -781,6 +781,17 @@ router.post('/auth', function (req, res) {
    * /api/auth: 
    *   post: 
    *     summary: Authentication with regular patient account
+   *     requestBody:
+   *       description: data
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               data:
+   *                 type: object
+   *           example: { "data": { "Email": "a@a", "Password": "Cisco123" } }
    *     responses: 
    *       200: 
    *         description: Patient authenticated!
@@ -833,6 +844,17 @@ router.post('/dentistAuth', function (req, res) {
    * /api/dentistAuth: 
    *   post: 
    *     summary: Authentication with regular dentist account
+   *     requestBody:
+   *       description: data
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               data:
+   *                 type: object
+   *           example: { "data": { "Email": "mmich91@hotmail.es", "Password": "Cisco123" } }
    *     responses: 
    *       200: 
    *         description: Dentist authenticated!
